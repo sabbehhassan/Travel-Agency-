@@ -1,17 +1,17 @@
 import dotenv from "dotenv";
-dotenv.config(); // ✅ must be at the top
+dotenv.config(); // ✅ must be at the very top
 
 import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
-import userRoutes from "./routes/users.js"; // ✅ make sure the path & extension are correct
+import userRoutes from "./routes/users.js"; // ✅ correct import
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Supabase connection
+// Supabase connection check
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 if (supabase) {
