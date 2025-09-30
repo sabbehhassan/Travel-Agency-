@@ -1,15 +1,31 @@
-// src/components/Navbar.jsx
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
-import { useAuth } from "../../Context/AuthContext"; // ✅ context import
+import { Link, useNavigate } from "react-router-dom";
+import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
+import { useAuth } from "../../Context/AuthContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isLoggedIn } = useAuth(); // ✅ sirf isLoggedIn use karenge
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { logout, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+    setDropdownOpen(false);
+  };
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Destinations", path: "/destinations" },
+    { name: "Packages", path: "/packages" },
+    { name: "Contact", path: "/contact" },
+  ];
 
   return (
     <nav className="fixed top-0 w-full bg-white shadow-md z-50">
@@ -22,17 +38,52 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden lg:flex gap-6 text-gray-800 font-medium">
-          <Link to="/" className="hover:text-cyan-600">Home</Link>
-          <Link to="/about" className="hover:text-cyan-600">About</Link>
-          <Link to="/destinations" className="hover:text-cyan-600">Destinations</Link>
-          <Link to="/packages" className="hover:text-cyan-600">Packages</Link>
-          <Link to="/contact" className="hover:text-cyan-600">Contact</Link>
-        </div>
+        <div className="hidden lg:flex gap-6 text-gray-800 font-medium items-center">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              className="hover:text-cyan-600"
+            >
+              {link.name}
+            </Link>
+          ))}
 
-        {/* Auth Buttons (Navbar pe sirf Login/Signup ya kuch bhi nahi) */}
-        <div className="hidden lg:flex gap-4">
-          {!isLoggedIn && (
+          {/* Profile / Auth */}
+          {isLoggedIn ? (
+            <div className="relative">
+              <button
+                onClick={toggleDropdown}
+                className="text-2xl text-gray-700 hover:text-cyan-600"
+              >
+                <FaUserCircle />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setDropdownOpen(false)}
+                    className="block px-4 py-2 hover:bg-cyan-100"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/profile"
+                    onClick={() => setDropdownOpen(false)}
+                    className="block px-4 py-2 hover:bg-cyan-100"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
             <>
               <Link
                 to="/login"
@@ -51,23 +102,59 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Icon */}
-        <div className="lg:hidden">
+        <div className="lg:hidden flex items-center gap-2">
+          {isLoggedIn && (
+            <button
+              onClick={toggleDropdown}
+              className="text-2xl text-gray-700"
+            >
+              <FaUserCircle />
+            </button>
+          )}
           <button onClick={toggleMenu} className="text-cyan-700 text-2xl">
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
       </div>
 
-      {/* Mobile & Tablet Menu */}
+      {/* Mobile Menu */}
       {menuOpen && (
         <div className="lg:hidden bg-white shadow-lg px-4 pt-4 pb-6 space-y-4">
-          <Link to="/" onClick={closeMenu} className="block hover:text-cyan-600">Home</Link>
-          <Link to="/about" onClick={closeMenu} className="block hover:text-cyan-600">About</Link>
-          <Link to="/destinations" onClick={closeMenu} className="block hover:text-cyan-600">Destinations</Link>
-          <Link to="/packages" onClick={closeMenu} className="block hover:text-cyan-600">Packages</Link>
-          <Link to="/contact" onClick={closeMenu} className="block hover:text-cyan-600">Contact</Link>
-          <hr />
-          {!isLoggedIn && (
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              onClick={closeMenu}
+              className="block hover:text-cyan-600"
+            >
+              {link.name}
+            </Link>
+          ))}
+
+          {isLoggedIn ? (
+            <div className="border-t pt-2 space-y-2">
+              <Link
+                to="/dashboard"
+                onClick={() => { closeMenu(); setDropdownOpen(false); }}
+                className="block px-4 py-1 hover:bg-cyan-100 rounded"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/profile"
+                onClick={() => { closeMenu(); setDropdownOpen(false); }}
+                className="block px-4 py-1 hover:bg-cyan-100 rounded"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={() => { handleLogout(); closeMenu(); }}
+                className="w-full text-left px-4 py-1 hover:bg-red-600 hover:text-white rounded"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
             <>
               <Link
                 to="/login"
@@ -85,6 +172,32 @@ const Navbar = () => {
               </Link>
             </>
           )}
+        </div>
+      )}
+
+      {/* Mobile Dropdown (for profile icon on mobile) */}
+      {dropdownOpen && isLoggedIn && !menuOpen && (
+        <div className="lg:hidden bg-white border-t px-4 py-2 shadow-md space-y-2">
+          <Link
+            to="/dashboard"
+            onClick={() => setDropdownOpen(false)}
+            className="block px-4 py-2 hover:bg-cyan-100 rounded"
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/profile"
+            onClick={() => setDropdownOpen(false)}
+            className="block px-4 py-2 hover:bg-cyan-100 rounded"
+          >
+            Profile
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white rounded"
+          >
+            Logout
+          </button>
         </div>
       )}
     </nav>
