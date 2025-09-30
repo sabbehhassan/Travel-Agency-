@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
+import axios from "axios";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -9,13 +10,32 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  const [message, setMessage] = useState(""); // ✅ feedback user ke liye
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Register Data:", formData);
+
+    if (formData.password !== formData.confirmPassword) {
+      setMessage("❌ Passwords do not match");
+      return;
+    }
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/users/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      setMessage("✅ Registered successfully!");
+      console.log("User Registered:", res.data);
+    } catch (err) {
+      setMessage(`❌ ${err.response?.data?.message || "Registration failed"}`);
+    }
   };
 
   return (
@@ -26,6 +46,9 @@ const Register = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
             Create your <span className="text-cyan-600">Tour to Heaven</span> account
           </h2>
+
+          {/* Feedback Message */}
+          {message && <p className="mb-4 text-center text-red-600">{message}</p>}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Full Name */}
@@ -109,7 +132,7 @@ const Register = () => {
         </div>
       </div>
 
-      {/* Right Side - Image (desktop only) */}
+      {/* Right Side - Image */}
       <div className="hidden lg:flex flex-1">
         <img
           src="https://images.unsplash.com/photo-1501785888041-af3ef285b470"
