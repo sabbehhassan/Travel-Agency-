@@ -1,3 +1,4 @@
+// src/components/Navbar.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
@@ -29,16 +30,18 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 w-full bg-white shadow-md z-50">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Logo */}
+      {/* 3 Grid Layout */}
+      <div className="container mx-auto px-4 py-3 grid grid-cols-3 items-center">
+        
+        {/* Left: Brand Logo */}
         <div className="text-2xl font-bold text-cyan-700">
           <Link to="/" onClick={closeMenu}>
             GilgitBaltistanTours
           </Link>
         </div>
 
-        {/* Desktop Links */}
-        <div className="hidden lg:flex gap-6 text-gray-800 font-medium items-center">
+        {/* Center: Nav Links */}
+        <div className="hidden lg:flex justify-center gap-6 text-gray-800 font-medium">
           {navLinks.map((link) => (
             <Link
               key={link.name}
@@ -48,8 +51,10 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
+        </div>
 
-          {/* Profile / Auth */}
+        {/* Right: Auth Buttons / Avatar */}
+        <div className="hidden lg:flex justify-end items-center gap-4">
           {isLoggedIn ? (
             <div className="relative">
               <button
@@ -101,8 +106,8 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu Icon */}
-        <div className="lg:hidden flex items-center gap-2">
+        {/* Mobile Menu Icon (on Right side) */}
+        <div className="lg:hidden flex justify-end items-center gap-2 col-span-3">
           {isLoggedIn && (
             <button
               onClick={toggleDropdown}
@@ -175,7 +180,7 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Mobile Dropdown (for profile icon on mobile) */}
+      {/* Mobile Dropdown (profile icon on mobile) */}
       {dropdownOpen && isLoggedIn && !menuOpen && (
         <div className="lg:hidden bg-white border-t px-4 py-2 shadow-md space-y-2">
           <Link
