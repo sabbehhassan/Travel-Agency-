@@ -6,7 +6,7 @@ import About from "../pages/About";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserDashboard from "../pages/UserDashboard";
-import { AuthProvider } from "../context/AuthContext";
+import { AuthProvider } from "../Context/AuthContext";
 import ProfilePage from "../pages/Profile";
 
 
