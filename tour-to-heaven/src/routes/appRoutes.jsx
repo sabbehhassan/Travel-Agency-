@@ -1,30 +1,25 @@
-// src/router/index.jsx
+// src/routes/appRoutes.jsx
+import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../layout";
 import Home from "../pages/Home";
-import About from "../pages/About"; 
+import About from "../pages/About";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserDashboard from "../pages/UserDashboard";
-import { AuthProvider } from "../Context/AuthContext";
 import ProfilePage from "../pages/Profile";
-
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <AuthProvider>
-        <Layout />
-      </AuthProvider>
-    ),
+    element: <Layout />, // AuthProvider wrapped at app root in main.jsx
     children: [
-      { path: "", element: <Home /> },
+      { index: true, element: <Home /> },
       { path: "about", element: <About /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "dashboard", element: <UserDashboard /> },
-      { path: "profile", element: <ProfilePage />}
+      { path: "profile", element: <ProfilePage /> },
     ],
   },
 ]);

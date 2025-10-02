@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/pages/Profile/index.jsx
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../Context/AuthContext";
 import {
   UserIcon,
@@ -10,20 +11,18 @@ import {
 
 const ProfilePage = () => {
   const { user, updateProfile, changePassword } = useAuth();
-  const [activeTab, setActiveTab] = useState("profile"); // workflow tabs
+  const [activeTab, setActiveTab] = useState("profile");
   const [editMode, setEditMode] = useState(false);
 
-  const [avatarPreview, setAvatarPreview] = useState(
-    user?.avatar || "/default-avatar.png"
-  );
-
   const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    phone: user?.phone || "",
-    cnic: user?.cnic || "",
-    avatar: user?.avatar || "",
+    name: "",
+    email: "",
+    phone: "",
+    cnic: "",
+    avatar: "", // will hold File when editing
   });
+
+  const [avatarPreview, setAvatarPreview] = useState("/default-avatar.png");
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -33,42 +32,77 @@ const ProfilePage = () => {
 
   const [passwordMessage, setPasswordMessage] = useState("");
 
-  // handle input change
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // handle avatar change
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({ ...formData, avatar: file });
-      const reader = new FileReader();
-      reader.onloadend = () => setAvatarPreview(reader.result);
-      reader.readAsDataURL(file);
+  // Keep local form in sync with the authenticated user.
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        cnic: user.cnic || "",
+        avatar: "",
+      });
+      setAvatarPreview(user.avatar || "/default-avatar.png");
+    } else {
+      // If no user (logged out) reset
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        cnic: "",
+        avatar: "",
+      });
+      setAvatarPreview("/default-avatar.png");
     }
+  }, [user]);
+
+  const handleChange = (e) => {
+    setFormData((s) => ({ ...s, [e.target.name]: e.target.value }));
   };
 
-  // save profile
-  const handleSave = () => {
-    updateProfile(formData);
+  const handleAvatarChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFormData((s) => ({ ...s, avatar: file }));
+    // show local preview using object URL (faster & not base64)
+    const url = URL.createObjectURL(file);
+    setAvatarPreview(url);
+    // revoke URL later not necessary here; browser will free on unload.
+  };
+
+  const handleSave = async () => {
+    // build FormData only with changed values
+    const payload = new FormData();
+    if (formData.name) payload.append("name", formData.name);
+    if (formData.email) payload.append("email", formData.email);
+    if (formData.phone) payload.append("phone", formData.phone);
+    if (formData.cnic) payload.append("cnic", formData.cnic);
+    if (formData.avatar && formData.avatar instanceof File) {
+      payload.append("avatar", formData.avatar);
+    }
+
+    const result = await updateProfile(payload);
+    if (result.success) {
+      // Optionally show a toast, here a simple alert:
+      alert("✅ Profile updated");
+    } else {
+      alert("❌ " + (result.message || "Unable to update profile"));
+    }
     setEditMode(false);
   };
 
-  // change password
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       setPasswordMessage("❌ New passwords do not match");
       return;
     }
-    changePassword(passwordData.currentPassword, passwordData.newPassword)
-      .then(() => {
-        setPasswordMessage("✅ Password updated successfully");
-        setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
-      })
-      .catch((err) =>
-        setPasswordMessage(err.message || "❌ Error updating password")
-      );
+    const result = await changePassword(passwordData.currentPassword, passwordData.newPassword);
+    if (result.success) {
+      setPasswordMessage("✅ Password updated successfully");
+      setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    } else {
+      setPasswordMessage("❌ " + (result.message || "Password update failed"));
+    }
   };
 
   return (
@@ -82,19 +116,11 @@ const ProfilePage = () => {
               alt="Profile"
               className="w-24 h-24 rounded-full object-cover border-4 border-cyan-600 mx-auto"
             />
-            <label className="absolute bottom-0 right-0 bg-cyan-600 text-white rounded-full p-1 cursor-pointer">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarChange}
-                className="hidden"
-              />
-              ✎
-            </label>
           </div>
-          <h2 className="mt-4 text-lg font-semibold text-gray-800">{user?.name}</h2>
-          <p className="text-sm text-gray-500">{user?.email}</p>
+          <h2 className="mt-4 text-lg font-semibold text-gray-800">{formData.name}</h2>
+          <p className="text-sm text-gray-500">{formData.email}</p>
         </div>
+
         <nav className="flex-1 px-6 py-6 space-y-4">
           <button
             onClick={() => setActiveTab("profile")}
@@ -104,6 +130,7 @@ const ProfilePage = () => {
           >
             <UserIcon className="h-5 w-5" /> Profile Info
           </button>
+
           <button
             onClick={() => setActiveTab("security")}
             className={`flex items-center gap-2 font-medium ${
@@ -112,6 +139,7 @@ const ProfilePage = () => {
           >
             <LockClosedIcon className="h-5 w-5" /> Security
           </button>
+
           <button
             onClick={() => setActiveTab("bookings")}
             className={`flex items-center gap-2 font-medium ${
@@ -125,7 +153,6 @@ const ProfilePage = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-6 md:p-10 space-y-8">
-        {/* Profile Info */}
         {activeTab === "profile" && (
           <div className="bg-white shadow rounded-xl p-6">
             <div className="flex justify-between items-center border-b pb-4 mb-6">
@@ -133,7 +160,7 @@ const ProfilePage = () => {
                 <UserIcon className="h-6 w-6 text-cyan-600" /> Personal Information
               </h3>
               <button
-                onClick={() => setEditMode(!editMode)}
+                onClick={() => setEditMode((s) => !s)}
                 className="bg-cyan-600 text-white px-4 py-2 rounded-md hover:bg-cyan-700"
               >
                 {editMode ? "Cancel" : "Edit"}
@@ -141,19 +168,27 @@ const ProfilePage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Avatar */}
+              <div>
+                <label className="text-gray-600 text-sm">Profile Picture</label>
+                <div className="flex items-center gap-4 mt-1">
+                  <img src={avatarPreview} alt="avatar" className="w-16 h-16 rounded-full object-cover border" />
+                  {editMode && (
+                    <label className="bg-cyan-600 text-white px-3 py-2 rounded-md cursor-pointer hover:bg-cyan-700">
+                      Change
+                      <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
+                    </label>
+                  )}
+                </div>
+              </div>
+
               {/* Name */}
               <div>
                 <label className="text-gray-600 text-sm">Name</label>
                 {editMode ? (
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-500"
-                  />
+                  <input name="name" value={formData.name} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-500" />
                 ) : (
-                  <p className="font-medium text-gray-800">{user?.name}</p>
+                  <p className="font-medium text-gray-800">{formData.name}</p>
                 )}
               </div>
 
@@ -161,15 +196,9 @@ const ProfilePage = () => {
               <div>
                 <label className="text-gray-600 text-sm">Email</label>
                 {editMode ? (
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-500"
-                  />
+                  <input name="email" value={formData.email} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-500" />
                 ) : (
-                  <p className="font-medium text-gray-800">{user?.email}</p>
+                  <p className="font-medium text-gray-800">{formData.email}</p>
                 )}
               </div>
 
@@ -177,18 +206,9 @@ const ProfilePage = () => {
               <div>
                 <label className="text-gray-600 text-sm">Phone</label>
                 {editMode ? (
-                  <input
-                    type="text"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-500"
-                  />
+                  <input name="phone" value={formData.phone} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-500" />
                 ) : (
-                  <p className="font-medium text-gray-800 flex items-center gap-2">
-                    <DevicePhoneMobileIcon className="h-5 w-5 text-cyan-500" />
-                    {user?.phone || "N/A"}
-                  </p>
+                  <p className="font-medium text-gray-800 flex items-center gap-2"><DevicePhoneMobileIcon className="h-5 w-5 text-cyan-500" /> {formData.phone || "N/A"}</p>
                 )}
               </div>
 
@@ -196,131 +216,49 @@ const ProfilePage = () => {
               <div>
                 <label className="text-gray-600 text-sm">CNIC</label>
                 {editMode ? (
-                  <input
-                    type="text"
-                    name="cnic"
-                    value={formData.cnic}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-500"
-                    placeholder="xxxxx-xxxxxxx-x"
-                  />
+                  <input name="cnic" value={formData.cnic} onChange={handleChange} placeholder="xxxxx-xxxxxxx-x" className="w-full border rounded-lg px-3 py-2 mt-1 focus:ring-2 focus:ring-cyan-500" />
                 ) : (
-                  <p className="font-medium text-gray-800 flex items-center gap-2">
-                    <IdentificationIcon className="h-5 w-5 text-cyan-500" />
-                    {user?.cnic || "N/A"}
-                  </p>
+                  <p className="font-medium text-gray-800 flex items-center gap-2"><IdentificationIcon className="h-5 w-5 text-cyan-500" /> {formData.cnic || "N/A"}</p>
                 )}
               </div>
 
               {/* Member Since */}
               <div>
                 <label className="text-gray-600 text-sm">Member Since</label>
-                <p className="font-medium text-gray-800">
-                  {user?.createdAt?.slice(0, 10) || "-"}
-                </p>
+                <p className="font-medium text-gray-800">{user?.createdAt?.slice(0, 10) || "-"}</p>
               </div>
             </div>
 
             {editMode && (
               <div className="mt-6 flex justify-end">
-                <button
-                  onClick={handleSave}
-                  className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700"
-                >
-                  Save Changes
-                </button>
+                <button onClick={handleSave} className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">Save Changes</button>
               </div>
             )}
           </div>
         )}
 
-        {/* Security */}
         {activeTab === "security" && (
           <div className="bg-white shadow rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
-              <LockClosedIcon className="h-6 w-6 text-cyan-600" /> Change Password
-            </h3>
-            {passwordMessage && (
-              <p
-                className={`mb-4 text-sm ${
-                  passwordMessage.includes("✅") ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {passwordMessage}
-              </p>
-            )}
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6"><LockClosedIcon className="h-6 w-6 text-cyan-600" /> Change Password</h3>
+
+            {passwordMessage && <p className={`mb-4 text-sm ${passwordMessage.includes("✅") ? "text-green-600" : "text-red-600"}`}>{passwordMessage}</p>}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <input
-                type="password"
-                placeholder="Current Password"
-                value={passwordData.currentPassword}
-                onChange={(e) =>
-                  setPasswordData({ ...passwordData, currentPassword: e.target.value })
-                }
-                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500"
-              />
-              <input
-                type="password"
-                placeholder="New Password"
-                value={passwordData.newPassword}
-                onChange={(e) =>
-                  setPasswordData({ ...passwordData, newPassword: e.target.value })
-                }
-                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500"
-              />
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                value={passwordData.confirmPassword}
-                onChange={(e) =>
-                  setPasswordData({ ...passwordData, confirmPassword: e.target.value })
-                }
-                className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500"
-              />
+              <input type="password" placeholder="Current Password" value={passwordData.currentPassword} onChange={(e) => setPasswordData(s => ({ ...s, currentPassword: e.target.value }))} className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500" />
+              <input type="password" placeholder="New Password" value={passwordData.newPassword} onChange={(e) => setPasswordData(s => ({ ...s, newPassword: e.target.value }))} className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500" />
+              <input type="password" placeholder="Confirm Password" value={passwordData.confirmPassword} onChange={(e) => setPasswordData(s => ({ ...s, confirmPassword: e.target.value }))} className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500" />
             </div>
+
             <div className="mt-6 flex justify-end">
-              <button
-                onClick={handlePasswordChange}
-                className="bg-yellow-600 text-white px-6 py-2 rounded-md hover:bg-yellow-700"
-              >
-                Update Password
-              </button>
+              <button onClick={handlePasswordChange} className="bg-yellow-600 text-white px-6 py-2 rounded-md hover:bg-yellow-700">Update Password</button>
             </div>
           </div>
         )}
 
-        {/* Booking History */}
         {activeTab === "bookings" && (
           <div className="bg-white shadow rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6">
-              <CalendarIcon className="h-6 w-6 text-cyan-600" /> Booking History
-            </h3>
+            <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2 mb-6"><CalendarIcon className="h-6 w-6 text-cyan-600" /> Booking History</h3>
             <p className="text-gray-600">Your bookings will appear here...</p>
-
-            {/* Sample Table */}
-            <div className="mt-4 overflow-x-auto">
-              <table className="min-w-full border text-sm">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="border px-4 py-2 text-left">Tour</th>
-                    <th className="border px-4 py-2 text-left">Date</th>
-                    <th className="border px-4 py-2 text-left">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="border px-4 py-2">Hunza Valley Tour</td>
-                    <td className="border px-4 py-2">2025-11-15</td>
-                    <td className="border px-4 py-2 text-green-600">Confirmed</td>
-                  </tr>
-                  <tr>
-                    <td className="border px-4 py-2">Skardu Adventure</td>
-                    <td className="border px-4 py-2">2025-12-02</td>
-                    <td className="border px-4 py-2 text-yellow-600">Pending</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
           </div>
         )}
       </main>

@@ -1,82 +1,120 @@
-import { createContext, useState, useEffect, useContext } from "react";
+// src/Context/AuthContext.jsx
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-export const AuthContext = createContext();
-const API_URL = "http://localhost:5000/api/users";
+const API_BASE = "http://localhost:5000/api/users";
 
+const AuthContext = createContext(null);
+
+/**
+ * AuthProvider
+ * - Keeps user and token in state + localStorage
+ * - On mount tries to restore token & user and then fetches /me to sync
+ * - Exposes login/logout/updateProfile/changePassword
+ */
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(() => localStorage.getItem("token") || null);
+  const [user, setUser] = useState(() => {
+    const s = localStorage.getItem("user");
+    return s ? JSON.parse(s) : null;
+  });
 
-  // ✅ Load user when token exists
+  // Sync localStorage whenever user/token changes
   useEffect(() => {
-    if (token) {
-      fetch(`${API_URL}/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data && !data.message) {
-            setUser(data);
-          } else {
-            logout();
-          }
-        })
-        .catch(() => logout());
-    }
+    if (token) localStorage.setItem("token", token);
+    else localStorage.removeItem("token");
+
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else localStorage.removeItem("user");
+  }, [token, user]);
+
+  // On token (app load or token change) fetch fresh user from /me
+  useEffect(() => {
+    const load = async () => {
+      if (!token) return;
+      try {
+        const res = await fetch(`${API_BASE}/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (res.ok && data) {
+          setUser(data);
+        } else {
+          // token invalid or expired -> clear
+          logout();
+        }
+      } catch (err) {
+        console.error("Auth /me error:", err);
+        logout();
+      }
+    };
+    load();
+    // only watch token
   }, [token]);
 
-  // ✅ Login
-  const login = (userData, authToken) => {
-    localStorage.setItem("token", authToken);
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
-    setToken(authToken);
+  // login expects server response shape: { user: {...}, token }
+  const login = (serverUser, serverToken) => {
+    if (!serverToken || !serverUser) return;
+    setToken(serverToken);
+    setUser(serverUser);
+    // localStorage will be updated by effect
   };
 
-  // ✅ Logout
   const logout = () => {
-    localStorage.clear();
-    setUser(null);
     setToken(null);
+    setUser(null);
+    // effect will clear localStorage
   };
 
-  // ✅ Update Profile (name, email, phone, cnic, avatar)
+  /**
+   * updateProfile
+   * Accepts either:
+   *  - FormData (already built, for file upload)
+   *  - plain object { name, email, phone, cnic, avatar }
+   *
+   * Returns { success: boolean, user?, message? }
+   */
   const updateProfile = async (profileData) => {
     try {
-      const formData = new FormData();
-      Object.keys(profileData).forEach((key) => {
-        if (profileData[key]) {
-          formData.append(key, profileData[key]);
-        }
-      });
+      let body;
+      if (profileData instanceof FormData) {
+        body = profileData;
+      } else {
+        body = new FormData();
+        Object.keys(profileData).forEach((k) => {
+          const v = profileData[k];
+          if (v !== undefined && v !== null && v !== "") body.append(k, v);
+        });
+      }
 
-      const res = await fetch(`${API_URL}/update`, {
+      const res = await fetch(`${API_BASE}/update`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // DON'T set Content-Type — browser will set multipart/form-data with boundary
+        },
+        body,
       });
 
       const data = await res.json();
-
       if (!res.ok) {
-        throw new Error(data.message || "Profile update failed");
+        const msg = data?.message || "Profile update failed";
+        throw new Error(msg);
       }
 
-      // ✅ Update frontend user + localStorage
-      setUser(data.user);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      return { success: true };
+      // data.user expected
+      if (data.user) {
+        setUser(data.user);
+      }
+      return { success: true, user: data.user };
     } catch (err) {
       console.error("Profile update error:", err.message);
       return { success: false, message: err.message };
     }
   };
 
-  // ✅ Change Password
   const changePassword = async (currentPassword, newPassword) => {
     try {
-      const res = await fetch(`${API_URL}/change-password`, {
+      const res = await fetch(`${API_BASE}/change-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -86,8 +124,9 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Password update failed");
-
+      if (!res.ok) {
+        throw new Error(data?.message || "Password change failed");
+      }
       return { success: true };
     } catch (err) {
       console.error("Password update error:", err.message);
@@ -105,6 +144,7 @@ export const AuthProvider = ({ children }) => {
         updateProfile,
         changePassword,
         isLoggedIn: !!token,
+        setUser, // exposed for advanced cases (optional)
       }}
     >
       {children}
@@ -112,5 +152,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// ✅ Custom hook
 export const useAuth = () => useContext(AuthContext);
