@@ -1,66 +1,33 @@
 import React, { useState, useEffect } from "react";
+import { FaUser, FaSignOutAlt, FaSuitcase, FaCog, FaBars, FaTimes } from "react-icons/fa";
+import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import {
-  FaUser,
-  FaSignOutAlt,
-  FaSuitcase,
-  FaCog,
-  FaHome,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa";
+import ProfilePage from "../Profile"; // 👈 ProfilePage ko embed karenge
 
 const UserDashboard = () => {
   const navigate = useNavigate();
+  const { logout, user, token } = useAuth();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("bookings"); // default
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
 
+  // ✅ Logout
   const handleLogout = () => {
-  localStorage.removeItem("token"); // correct key
-  localStorage.removeItem("user");  // also clear user
-  navigate("/login");
-};
-
-  // ✅ Fetch user info
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return navigate("/login");
-
-        const res = await fetch("http://localhost:5000/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) throw new Error("Failed to fetch user");
-        const data = await res.json();
-        setUser(data);
-      } catch (err) {
-        console.error(err.message);
-        navigate("/login");
-      }
-    };
-
-    fetchUser();
-  }, [navigate]);
+    logout();
+    navigate("/login");
+  };
 
   // ✅ Fetch bookings
   useEffect(() => {
     const fetchBookings = async () => {
+      if (activeTab !== "bookings") return;
       try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
+        if (!token) return navigate("/login");
         const res = await fetch("http://localhost:5000/api/users/bookings", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-
         if (!res.ok) throw new Error("Failed to fetch bookings");
         const data = await res.json();
         setBookings(data);
@@ -72,7 +39,7 @@ const UserDashboard = () => {
     };
 
     fetchBookings();
-  }, []);
+  }, [token, navigate, activeTab]);
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -92,18 +59,39 @@ const UserDashboard = () => {
         </div>
 
         <nav className="space-y-4 px-4 py-6">
-          <a href="#" className="flex items-center gap-2 text-gray-700 hover:text-cyan-600">
-            <FaHome /> Dashboard Home
-          </a>
-          <a href="#" className="flex items-center gap-2 text-gray-700 hover:text-cyan-600">
+          <button
+            onClick={() => setActiveTab("bookings")}
+            className={`flex items-center gap-2 w-full text-left ${
+              activeTab === "bookings"
+                ? "text-cyan-600 font-semibold"
+                : "text-gray-700 hover:text-cyan-600"
+            }`}
+          >
             <FaSuitcase /> My Bookings
-          </a>
-          <a href="#" className="flex items-center gap-2 text-gray-700 hover:text-cyan-600">
+          </button>
+
+          <button
+            onClick={() => setActiveTab("profile")}
+            className={`flex items-center gap-2 w-full text-left ${
+              activeTab === "profile"
+                ? "text-cyan-600 font-semibold"
+                : "text-gray-700 hover:text-cyan-600"
+            }`}
+          >
             <FaUser /> Profile
-          </a>
-          <a href="#" className="flex items-center gap-2 text-gray-700 hover:text-cyan-600">
+          </button>
+
+          <button
+            onClick={() => setActiveTab("settings")}
+            className={`flex items-center gap-2 w-full text-left ${
+              activeTab === "settings"
+                ? "text-cyan-600 font-semibold"
+                : "text-gray-700 hover:text-cyan-600"
+            }`}
+          >
             <FaCog /> Settings
-          </a>
+          </button>
+
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 text-red-600 hover:text-red-800 w-full"
@@ -134,74 +122,61 @@ const UserDashboard = () => {
 
           <h1 className="text-2xl font-bold text-gray-800">
             Welcome Back,{" "}
-            <span className="text-cyan-600">
-              {user ? user.name : "Loading..."}
-            </span>
-            !
+            <span className="text-cyan-600">{user?.name || "Loading..."}</span>!
           </h1>
-
-         
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        {/* Tabs */}
+        {activeTab === "bookings" && (
           <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Upcoming Trips</h2>
-            <p className="text-3xl font-bold text-cyan-600">
-              {bookings.filter((b) => b.status === "Confirmed").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Completed Trips</h2>
-            <p className="text-3xl font-bold text-cyan-600">
-              {bookings.filter((b) => b.status === "Completed").length}
-            </p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg font-semibold">Total Bookings</h2>
-            <p className="text-3xl font-bold text-cyan-600">{bookings.length}</p>
-          </div>
-        </div>
-
-        {/* Recent Bookings */}
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-xl font-bold mb-4">Recent Bookings</h2>
-
-          {loading ? (
-            <p>Loading...</p>
-          ) : bookings.length === 0 ? (
-            <p className="text-gray-500">No bookings found.</p>
-          ) : (
-            <table className="w-full border">
-              <thead>
-                <tr className="bg-gray-100 text-left">
-                  <th className="p-2 border">Destination</th>
-                  <th className="p-2 border">Date</th>
-                  <th className="p-2 border">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bookings.map((b) => (
-                  <tr key={b.id}>
-                    <td className="p-2 border">{b.destination}</td>
-                    <td className="p-2 border">{b.date}</td>
-                    <td
-                      className={`p-2 border font-semibold ${
-                        b.status === "Confirmed"
-                          ? "text-cyan-600"
-                          : b.status === "Completed"
-                          ? "text-green-600"
-                          : "text-gray-600"
-                      }`}
-                    >
-                      {b.status}
-                    </td>
+            <h2 className="text-xl font-bold mb-4">My Bookings</h2>
+            {loading ? (
+              <p>Loading...</p>
+            ) : bookings.length === 0 ? (
+              <p className="text-gray-500">No bookings found.</p>
+            ) : (
+              <table className="w-full border">
+                <thead>
+                  <tr className="bg-gray-100 text-left">
+                    <th className="p-2 border">Destination</th>
+                    <th className="p-2 border">Date</th>
+                    <th className="p-2 border">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+                </thead>
+                <tbody>
+                  {bookings.map((b) => (
+                    <tr key={b.id}>
+                      <td className="p-2 border">{b.destination}</td>
+                      <td className="p-2 border">{b.date}</td>
+                      <td
+                        className={`p-2 border font-semibold ${
+                          b.status === "Confirmed"
+                            ? "text-cyan-600"
+                            : b.status === "Completed"
+                            ? "text-green-600"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {b.status}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        )}
+
+        {activeTab === "profile" && (
+          <ProfilePage embedded /> // 👈 profile component ko embed kiya
+        )}
+
+        {activeTab === "settings" && (
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-xl font-bold mb-4">Settings</h2>
+            <p className="text-gray-600">Settings options will appear here...</p>
+          </div>
+        )}
       </main>
     </div>
   );

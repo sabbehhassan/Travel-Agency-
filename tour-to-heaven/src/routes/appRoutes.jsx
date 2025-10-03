@@ -8,11 +8,20 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserDashboard from "../pages/UserDashboard";
 import ProfilePage from "../pages/Profile";
+import ScrollToTop from "../components/ScrollToTop"; // ✅ import
+
+// Layout ke andar ScrollToTop wrap karenge
+const withScrollToTop = (element) => (
+  <>
+    <ScrollToTop />
+    {element}
+  </>
+);
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, // AuthProvider wrapped at app root in main.jsx
+    element: withScrollToTop(<Layout />), // ✅ wrap layout
     children: [
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
