@@ -8,7 +8,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserDashboard from "../pages/UserDashboard";
 import ProfilePage from "../pages/Profile";
-import ScrollToTop from "../components/ScrollToTop"; // ✅ import
+import ScrollToTop from "../components/ScrollToTop";
+import CustomizeTrip from "../pages/CustomizeTrip";
 
 // Layout ke andar ScrollToTop wrap karenge
 const withScrollToTop = (element) => (
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
       { path: "register", element: <Register /> },
       { path: "dashboard", element: <UserDashboard /> },
       { path: "profile", element: <ProfilePage /> },
+      { path: "customize-trip", element: <CustomizeTrip /> },
     ],
   },
 ]);

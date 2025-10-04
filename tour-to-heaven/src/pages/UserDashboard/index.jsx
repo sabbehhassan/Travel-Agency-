@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { FaUser, FaSignOutAlt, FaSuitcase, FaCog, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaUser,
+  FaSignOutAlt,
+  FaSuitcase,
+  FaCog,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
 import { useAuth } from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import ProfilePage from "../Profile"; // 👈 ProfilePage ko embed karenge
+import ProfilePage from "../Profile";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -25,14 +32,19 @@ const UserDashboard = () => {
       if (activeTab !== "bookings") return;
       try {
         if (!token) return navigate("/login");
+
         const res = await fetch("http://localhost:5000/api/users/bookings", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!res.ok) throw new Error("Failed to fetch bookings");
+
         const data = await res.json();
-        setBookings(data);
+        console.log("🔹 Bookings API Response:", data); // ✅ Debug
+
+        if (!res.ok) throw new Error(data.message || "Failed to fetch bookings");
+
+        setBookings(data.bookings || []);
       } catch (err) {
-        console.error(err.message);
+        console.error("❌ Fetch error:", err.message);
       } finally {
         setLoading(false);
       }
@@ -46,7 +58,9 @@ const UserDashboard = () => {
       {/* Sidebar */}
       <aside
         className={`fixed md:static top-0 left-0 h-full w-64 bg-white shadow-md transform transition-transform duration-300 z-50
-        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+        ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
       >
         <div className="flex items-center justify-between p-4 border-b">
           <span className="text-xl font-bold text-cyan-600">Dashboard</span>
@@ -139,15 +153,22 @@ const UserDashboard = () => {
                 <thead>
                   <tr className="bg-gray-100 text-left">
                     <th className="p-2 border">Destination</th>
-                    <th className="p-2 border">Date</th>
+                    <th className="p-2 border">Duration</th>
+                    <th className="p-2 border">Hotel</th>
+                    <th className="p-2 border">Travel</th>
                     <th className="p-2 border">Status</th>
+                    <th className="p-2 border">Price</th>
                   </tr>
                 </thead>
                 <tbody>
                   {bookings.map((b) => (
                     <tr key={b.id}>
                       <td className="p-2 border">{b.destination}</td>
-                      <td className="p-2 border">{b.date}</td>
+                      <td className="p-2 border">
+                        {b.days || 0} Days / {b.nights || 0} Nights
+                      </td>
+                      <td className="p-2 border">{b.hotel_category || "-"}</td>
+                      <td className="p-2 border">{b.travel_type || "-"}</td>
                       <td
                         className={`p-2 border font-semibold ${
                           b.status === "Confirmed"
@@ -159,6 +180,9 @@ const UserDashboard = () => {
                       >
                         {b.status}
                       </td>
+                      <td className="p-2 border">
+                        Rs. {(b.total_price || 0).toLocaleString()}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -167,9 +191,7 @@ const UserDashboard = () => {
           </div>
         )}
 
-        {activeTab === "profile" && (
-          <ProfilePage embedded /> // 👈 profile component ko embed kiya
-        )}
+        {activeTab === "profile" && <ProfilePage embedded />}
 
         {activeTab === "settings" && (
           <div className="bg-white p-6 rounded-lg shadow">
