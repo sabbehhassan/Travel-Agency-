@@ -10,6 +10,7 @@ import UserDashboard from "../pages/UserDashboard";
 import ProfilePage from "../pages/Profile";
 import ScrollToTop from "../components/ScrollToTop";
 import CustomizeTrip from "../pages/CustomizeTrip";
+import AdminDashboard from "../pages/AdminDashboard";
 
 // Layout ke andar ScrollToTop wrap karenge
 const withScrollToTop = (element) => (
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
       { path: "dashboard", element: <UserDashboard /> },
       { path: "profile", element: <ProfilePage /> },
       { path: "customize-trip", element: <CustomizeTrip /> },
+      { path: "admin-dashboard", element: <AdminDashboard /> },
     ],
   },
 ]);

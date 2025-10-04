@@ -53,6 +53,28 @@ const UserDashboard = () => {
     fetchBookings();
   }, [token, navigate, activeTab]);
 
+  const handleCancel = async (id) => {
+  if (!window.confirm("Are you sure you want to cancel this booking?")) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/users/bookings/${id}/cancel`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to cancel booking");
+
+    // ✅ Update state locally
+    setBookings((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status: "Cancelled" } : b))
+    );
+  } catch (err) {
+    console.error("❌ Cancel error:", err.message);
+    alert("Failed to cancel booking");
+  }
+};
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
@@ -151,41 +173,53 @@ const UserDashboard = () => {
             ) : (
               <table className="w-full border">
                 <thead>
-                  <tr className="bg-gray-100 text-left">
-                    <th className="p-2 border">Destination</th>
-                    <th className="p-2 border">Duration</th>
-                    <th className="p-2 border">Hotel</th>
-                    <th className="p-2 border">Travel</th>
-                    <th className="p-2 border">Status</th>
-                    <th className="p-2 border">Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bookings.map((b) => (
-                    <tr key={b.id}>
-                      <td className="p-2 border">{b.destination}</td>
-                      <td className="p-2 border">
-                        {b.days || 0} Days / {b.nights || 0} Nights
-                      </td>
-                      <td className="p-2 border">{b.hotel_category || "-"}</td>
-                      <td className="p-2 border">{b.travel_type || "-"}</td>
-                      <td
-                        className={`p-2 border font-semibold ${
-                          b.status === "Confirmed"
-                            ? "text-cyan-600"
-                            : b.status === "Completed"
-                            ? "text-green-600"
-                            : "text-gray-600"
-                        }`}
-                      >
-                        {b.status}
-                      </td>
-                      <td className="p-2 border">
-                        Rs. {(b.total_price || 0).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+  <tr className="bg-gray-100 text-left">
+    <th className="p-2 border">Destination</th>
+    <th className="p-2 border">Duration</th>
+    <th className="p-2 border">Hotel</th>
+    <th className="p-2 border">Travel</th>
+    <th className="p-2 border">Status</th>
+    <th className="p-2 border">Price</th>
+    <th className="p-2 border">Actions</th> {/* ✅ New column */}
+  </tr>
+</thead>
+<tbody>
+  {bookings.map((b) => (
+    <tr key={b.id}>
+      <td className="p-2 border">{b.destination}</td>
+      <td className="p-2 border">
+        {b.days} Days / {b.nights} Nights
+      </td>
+      <td className="p-2 border">{b.hotel_category}</td>
+      <td className="p-2 border">{b.travel_type}</td>
+      <td
+        className={`p-2 border font-semibold ${
+          b.status === "Confirmed"
+            ? "text-cyan-600"
+            : b.status === "Completed"
+            ? "text-green-600"
+            : b.status === "Cancelled"
+            ? "text-red-600"
+            : "text-gray-600"
+        }`}
+      >
+        {b.status}
+      </td>
+      <td className="p-2 border">Rs. {b.total_price.toLocaleString()}</td>
+      <td className="p-2 border">
+        {b.status === "Pending" && (
+          <button
+            onClick={() => handleCancel(b.id)}
+            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Cancel
+          </button>
+        )}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
               </table>
             )}
           </div>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import axios from "axios";
@@ -36,8 +35,12 @@ const Login = () => {
       // Update context
       login(user, token);
 
-      // ✅ Navigate directly after login
-      navigate("/dashboard");
+      // ✅ Navigate based on role
+      if (user.role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       setMessage(`❌ ${err.response?.data?.message || "Login failed"}`);
     }
