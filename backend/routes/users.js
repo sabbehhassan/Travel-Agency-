@@ -18,6 +18,7 @@ const authMiddleware = (req, res, next) => {
   try {
     const decoded = jwt.verify(authHeader.split(" ")[1], process.env.JWT_SECRET);
     req.userId = decoded.id;
+    req.userRole = decoded.role; // ✅ role add
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid token" });
@@ -45,13 +46,17 @@ router.post("/register", async (req, res) => {
 
     const { data, error } = await supabase
       .from("RegisterDetails")
-      .insert([{ name, email, password: hashedPassword }])
-      .select("id, name, email, phone, cnic, avatar, created_at")
+      .insert([{ name, email, password: hashedPassword, role: "user" }]) // 👈 default role user
+      .select("id, name, email, phone, cnic, avatar, role, created_at")
       .single();
 
     if (error) throw error;
 
-    const token = jwt.sign({ id: data.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { id: data.id, role: data.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.status(201).json({ user: data, token });
   } catch (err) {
@@ -68,7 +73,7 @@ router.post("/login", async (req, res) => {
   try {
     const { data: user, error } = await supabase
       .from("RegisterDetails")
-      .select("*")
+      .select("id, name, email, phone, cnic, avatar, role, password, created_at")
       .eq("email", email)
       .single();
 
@@ -81,7 +86,11 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { id: user.id, role: user.role }, // ✅ role added
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.json({
       user: {
@@ -91,6 +100,7 @@ router.post("/login", async (req, res) => {
         phone: user.phone,
         cnic: user.cnic,
         avatar: user.avatar,
+        role: user.role, // ✅ include role
         createdAt: user.created_at,
       },
       token,
@@ -107,7 +117,7 @@ router.get("/me", authMiddleware, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("RegisterDetails")
-      .select("id, name, email, phone, cnic, avatar, created_at")
+      .select("id, name, email, phone, cnic, avatar, role, created_at") // ✅ include role
       .eq("id", req.userId)
       .single();
 
@@ -154,7 +164,7 @@ router.put("/update", authMiddleware, upload.single("avatar"), async (req, res) 
         ...(avatarUrl && { avatar: avatarUrl }),
       })
       .eq("id", req.userId)
-      .select("id, name, email, phone, cnic, avatar, created_at")
+      .select("id, name, email, phone, cnic, avatar, role, created_at") // ✅ include role
       .single();
 
     if (error) throw error;
@@ -200,7 +210,7 @@ router.put("/change-password", authMiddleware, async (req, res) => {
 // ✅ Customize Trip API
 //
 router.post("/customize", authMiddleware, async (req, res) => {
-  console.log("🔹 Customize Trip Body:", req.body); // ✅ Debug
+  console.log("🔹 Customize Trip Body:", req.body);
   const { destination, days, nights, travelType, hotel, extras } = req.body;
 
   try {
@@ -240,8 +250,6 @@ router.post("/customize", authMiddleware, async (req, res) => {
 //
 router.get("/bookings", authMiddleware, async (req, res) => {
   try {
-    console.log("🔹 Fetching bookings for user:", req.userId); // Debug log
-
     const { data, error } = await supabase
       .from("Trips")
       .select("*")
@@ -250,8 +258,80 @@ router.get("/bookings", authMiddleware, async (req, res) => {
 
     if (error) throw error;
 
-    console.log("🔹 Bookings found:", data);
     res.json({ success: true, bookings: data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+//
+// ✅ Cancel Booking (User)
+router.put("/bookings/:id/cancel", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { data, error } = await supabase
+      .from("Trips")
+      .update({ status: "Cancelled" })
+      .eq("id", id)
+      .eq("user_id", req.userId) // user apni booking hi cancel kar sake
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({ success: true, booking: data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+//
+// ✅ Get All Bookings (Admin only)
+router.get("/admin/bookings", authMiddleware, async (req, res) => {
+  try {
+    if (req.userRole !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only." });
+    }
+
+    const { data, error } = await supabase
+      .from("Trips")
+      .select(`
+        id, destination, days, nights, travel_type, hotel_category,
+        total_price, status, created_at,
+        RegisterDetails(id, name, email)
+      `)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    res.json({ success: true, bookings: data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+//
+// ✅ Update Booking Status (Admin only)
+router.put("/admin/bookings/:id/status", authMiddleware, async (req, res) => {
+  try {
+    if (req.userRole !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only." });
+    }
+
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const { data, error } = await supabase
+      .from("Trips")
+      .update({ status })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json({ success: true, booking: data });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
