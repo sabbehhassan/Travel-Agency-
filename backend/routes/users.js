@@ -1,3 +1,4 @@
+// backend/routes/users.js
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -15,10 +16,7 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(
-      authHeader.split(" ")[1],
-      process.env.JWT_SECRET
-    );
+    const decoded = jwt.verify(authHeader.split(" ")[1], process.env.JWT_SECRET);
     req.userId = decoded.id;
     next();
   } catch (err) {
@@ -33,7 +31,6 @@ router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    // check existing user
     const { data: existingUser } = await supabase
       .from("RegisterDetails")
       .select("*")
@@ -44,10 +41,8 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // insert user
     const { data, error } = await supabase
       .from("RegisterDetails")
       .insert([{ name, email, password: hashedPassword }])
@@ -56,10 +51,7 @@ router.post("/register", async (req, res) => {
 
     if (error) throw error;
 
-    // generate token
-    const token = jwt.sign({ id: data.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ id: data.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     res.status(201).json({ user: data, token });
   } catch (err) {
@@ -74,7 +66,6 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // get user
     const { data: user, error } = await supabase
       .from("RegisterDetails")
       .select("*")
@@ -85,18 +76,13 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // match password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // token
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    // ✅ return full user object (no password)
     res.json({
       user: {
         id: user.id,
@@ -137,62 +123,48 @@ router.get("/me", authMiddleware, async (req, res) => {
 
 //
 // ✅ Profile Update API (with Avatar Upload)
-router.put(
-  "/update",
-  authMiddleware,
-  upload.single("avatar"),
-  async (req, res) => {
-    const { name, email, phone, cnic } = req.body;
-    let avatarUrl = null;
+router.put("/update", authMiddleware, upload.single("avatar"), async (req, res) => {
+  const { name, email, phone, cnic } = req.body;
+  let avatarUrl = null;
 
-    try {
-      // 🔹 Handle avatar upload
-      if (req.file) {
-        const fileName = `avatars/${req.userId}_${Date.now()}.jpg`;
+  try {
+    if (req.file) {
+      const fileName = `avatars/${req.userId}_${Date.now()}.jpg`;
 
-        const { error: uploadError } = await supabase.storage
-          .from("avatars") // ✅ bucket name must exist in Supabase
-          .upload(fileName, req.file.buffer, {
-            contentType: req.file.mimetype,
-            upsert: true,
-          });
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(fileName, req.file.buffer, {
+          contentType: req.file.mimetype,
+          upsert: true,
+        });
 
-        if (uploadError) throw uploadError;
+      if (uploadError) throw uploadError;
 
-        // ✅ Get Public URL
-        const { data: publicUrlData } = supabase.storage
-          .from("avatars")
-          .getPublicUrl(fileName);
-
-        avatarUrl = publicUrlData.publicUrl;
-      }
-
-      // 🔹 Update user profile in table
-      const { data: updatedUser, error } = await supabase
-        .from("RegisterDetails")
-        .update({
-          name,
-          email,
-          phone,
-          cnic,
-          ...(avatarUrl && { avatar: avatarUrl }),
-        })
-        .eq("id", req.userId)
-        .select("id, name, email, phone, cnic, avatar, created_at")
-        .single();
-
-      if (error) throw error;
-
-      res.json({
-        message: "✅ Profile updated successfully",
-        user: updatedUser,
-      });
-    } catch (err) {
-      console.error("Profile update error:", err.message);
-      res.status(500).json({ message: err.message });
+      const { data: publicUrlData } = supabase.storage.from("avatars").getPublicUrl(fileName);
+      avatarUrl = publicUrlData.publicUrl;
     }
+
+    const { data: updatedUser, error } = await supabase
+      .from("RegisterDetails")
+      .update({
+        name,
+        email,
+        phone,
+        cnic,
+        ...(avatarUrl && { avatar: avatarUrl }),
+      })
+      .eq("id", req.userId)
+      .select("id, name, email, phone, cnic, avatar, created_at")
+      .single();
+
+    if (error) throw error;
+
+    res.json({ message: "✅ Profile updated successfully", user: updatedUser });
+  } catch (err) {
+    console.error("Profile update error:", err.message);
+    res.status(500).json({ message: err.message });
   }
-);
+});
 
 //
 // ✅ Change Password
@@ -201,7 +173,6 @@ router.put("/change-password", authMiddleware, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
   try {
-    // fetch user password
     const { data: user } = await supabase
       .from("RegisterDetails")
       .select("password")
@@ -210,24 +181,79 @@ router.put("/change-password", authMiddleware, async (req, res) => {
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // check current password
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Current password incorrect" });
     }
 
-    // hash new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // update
-    await supabase
-      .from("RegisterDetails")
-      .update({ password: hashedPassword })
-      .eq("id", req.userId);
+    await supabase.from("RegisterDetails").update({ password: hashedPassword }).eq("id", req.userId);
 
     res.json({ message: "Password updated successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+//
+// ✅ Customize Trip API
+//
+router.post("/customize", authMiddleware, async (req, res) => {
+  console.log("🔹 Customize Trip Body:", req.body); // ✅ Debug
+  const { destination, days, nights, travelType, hotel, extras } = req.body;
+
+  try {
+    let basePrice = hotel === "Luxury" ? 470000 : hotel === "Deluxe" ? 340000 : 250000;
+    if (travelType === "By Air") basePrice += 50000;
+
+    const extrasCost = Object.values(extras).filter(Boolean).length * 5000;
+    const totalPrice = basePrice + extrasCost;
+
+    const { data, error } = await supabase
+      .from("Trips")
+      .insert([
+        {
+          user_id: req.userId,
+          destination,
+          days,
+          nights,
+          travel_type: travelType,
+          hotel_category: hotel,
+          extras,
+          total_price: totalPrice,
+          status: "Pending",
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.json({ success: true, trip: data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+//
+// ✅ Get All Bookings of Logged-in User
+//
+router.get("/bookings", authMiddleware, async (req, res) => {
+  try {
+    console.log("🔹 Fetching bookings for user:", req.userId); // Debug log
+
+    const { data, error } = await supabase
+      .from("Trips")
+      .select("*")
+      .eq("user_id", req.userId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    console.log("🔹 Bookings found:", data);
+    res.json({ success: true, bookings: data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

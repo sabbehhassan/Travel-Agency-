@@ -26,3 +26,9 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
+// server.js ke last me
+app.use((req, res) => {
+  console.error(`❌ Route not found: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({ message: "Route not found" });
+});
