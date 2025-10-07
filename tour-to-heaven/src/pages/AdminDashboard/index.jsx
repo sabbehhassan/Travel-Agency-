@@ -35,7 +35,7 @@ const AdminDashboard = () => {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/users/admin/bookings",
+        "http://localhost:5000/api/bookings/admin/bookings",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -54,21 +54,21 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-  const loadBookings = async () => {
-    if (user?.role === "admin" && token && activeTab === "bookings") {
-      await fetchBookings();
-    }
-  };
-  loadBookings();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [user, token, activeTab]);
-
+    const loadBookings = async () => {
+      if (user?.role === "admin" && token && activeTab === "bookings") {
+        await fetchBookings();
+      }
+    };
+    loadBookings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, token, activeTab]);
 
   // ✅ Update booking status
   const updateStatus = async (id, status) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/users/admin/bookings/${id}/status`,
+        `http://localhost:5000/api/bookings/admin/bookings/${id}/status`,
+
         {
           method: "PUT",
           headers: {

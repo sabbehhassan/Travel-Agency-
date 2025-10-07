@@ -12,7 +12,12 @@ const CustomizeTrip = () => {
     nights: 0,
     travelType: "By Air",
     hotel: "Deluxe",
-    extras: { guide: false, bonfire: false, photography: false, localFood: false },
+    extras: {
+      guide: false,
+      bonfire: false,
+      photography: false,
+      localFood: false,
+    },
   });
 
   const [loading, setLoading] = useState(false);
@@ -22,7 +27,8 @@ const CustomizeTrip = () => {
     navigate("/login");
   }
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleExtrasChange = (e) => {
     setFormData({
@@ -37,10 +43,10 @@ const CustomizeTrip = () => {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/users/customize", {
+      const res = await fetch("http://localhost:5000/api/bookings/customize", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // ✅ FIXED
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
@@ -61,12 +67,24 @@ const CustomizeTrip = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-6 flex justify-center">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-3xl">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Customize Your Trip</h2>
-        {message && <p className={`mb-4 text-sm ${message.includes("✅") ? "text-green-600" : "text-red-600"}`}>{message}</p>}
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Customize Your Trip
+        </h2>
+        {message && (
+          <p
+            className={`mb-4 text-sm ${
+              message.includes("✅") ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {message}
+          </p>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Destination */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Destination</label>
+            <label className="block text-gray-700 font-medium mb-2">
+              Destination
+            </label>
             <input
               type="text"
               name="destination"
@@ -81,7 +99,9 @@ const CustomizeTrip = () => {
           {/* Days & Nights */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-700 font-medium mb-2">Days</label>
+              <label className="block text-gray-700 font-medium mb-2">
+                Days
+              </label>
               <input
                 type="number"
                 name="days"
@@ -92,7 +112,9 @@ const CustomizeTrip = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-2">Nights</label>
+              <label className="block text-gray-700 font-medium mb-2">
+                Nights
+              </label>
               <input
                 type="number"
                 name="nights"
@@ -106,7 +128,9 @@ const CustomizeTrip = () => {
 
           {/* Travel Type */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Travel Type</label>
+            <label className="block text-gray-700 font-medium mb-2">
+              Travel Type
+            </label>
             <select
               name="travelType"
               value={formData.travelType}
@@ -120,7 +144,9 @@ const CustomizeTrip = () => {
 
           {/* Hotel Category */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Hotel Category</label>
+            <label className="block text-gray-700 font-medium mb-2">
+              Hotel Category
+            </label>
             <select
               name="hotel"
               value={formData.hotel}
@@ -135,7 +161,9 @@ const CustomizeTrip = () => {
 
           {/* Extras */}
           <div>
-            <label className="block text-gray-700 font-medium mb-2">Extra Services</label>
+            <label className="block text-gray-700 font-medium mb-2">
+              Extra Services
+            </label>
             <div className="grid grid-cols-2 gap-4">
               {Object.keys(formData.extras).map((extra) => (
                 <label key={extra} className="flex items-center gap-2">
@@ -152,7 +180,11 @@ const CustomizeTrip = () => {
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-md transition">
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-md transition"
+          >
             {loading ? "Saving..." : "Save Trip"}
           </button>
         </form>

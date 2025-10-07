@@ -33,7 +33,8 @@ const UserDashboard = () => {
       try {
         if (!token) return navigate("/login");
 
-        const res = await fetch("http://localhost:5000/api/users/bookings", {
+        const res = await fetch("http://localhost:5000/api/bookings/bookings", {
+
           headers: { Authorization: `Bearer ${token}` },
         });
 
