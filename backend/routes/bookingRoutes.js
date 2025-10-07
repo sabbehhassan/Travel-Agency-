@@ -4,7 +4,9 @@ import {
   getUserBookings,
   cancelBooking,
   getAllBookingsAdmin,
+  getAllHotelBookingsAdmin, // ✅ Added
   updateBookingStatus,
+  updateHotelBookingStatus, // ✅ Added
   createHotelBooking,
   getUserHotelBookings,
   cancelHotelBooking,
@@ -13,18 +15,26 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// 🏨 Hotel Booking Routes
+// 🏨 Hotel Booking Routes (User)
 router.post("/hotel", authMiddleware, createHotelBooking);
 router.get("/hotel/user", authMiddleware, getUserHotelBookings);
 router.put("/hotel/:id/cancel", authMiddleware, cancelHotelBooking);
 
-// ✈️ Trip Routes
+// ✈️ Trip Routes (User)
 router.post("/customize", authMiddleware, customizeTrip);
 router.get("/bookings", authMiddleware, getUserBookings);
 router.put("/bookings/:id/cancel", authMiddleware, cancelBooking);
 
-// 🛠️ Admin Routes
+// 🛠️ Admin Routes (For Admin Panel)
 router.get("/admin/bookings", authMiddleware, getAllBookingsAdmin);
 router.put("/admin/bookings/:id/status", authMiddleware, updateBookingStatus);
+
+// ✅ Added Admin Hotel Routes
+router.get("/admin/hotelbookings", authMiddleware, getAllHotelBookingsAdmin);
+router.put(
+  "/admin/hotelbookings/:id/status",
+  authMiddleware,
+  updateHotelBookingStatus
+);
 
 export default router;
