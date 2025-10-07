@@ -133,6 +133,7 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: err.message };
     }
   };
+  
 
   return (
     <AuthContext.Provider
@@ -152,4 +153,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
