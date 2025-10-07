@@ -5,27 +5,18 @@ import { useNavigate } from "react-router-dom";
 
 const StayOptions = () => {
   const { user, token, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [form, setForm] = useState({
     rooms: 1,
     guests: 1,
     checkIn: "",
     checkOut: "",
+    roomType: "AC", // default option
   });
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  // open booking modal (or redirect if not logged in)
-  const handleOpenBooking = (stay) => {
-    if (!isLoggedIn) {
-      // redirect to login page
-      navigate("/login", { replace: true });
-      return;
-    }
-    // open modal if logged in
-    setSelectedHotel(stay);
-  };
 
   // handle input change
   const handleChange = (e) => {
@@ -34,6 +25,11 @@ const StayOptions = () => {
 
   // handle booking submit
   const handleBooking = async () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+
     if (!form.checkIn || !form.checkOut) {
       setMessage("📅 Please select check-in and check-out dates.");
       return;
@@ -96,9 +92,16 @@ const StayOptions = () => {
                   {stay.location}
                 </p>
                 <p className="text-gray-600 text-sm my-2">{stay.description}</p>
+                <p className="text-cyan-700 font-bold">{stay.price}</p>
 
                 <button
-                  onClick={() => handleOpenBooking(stay)}
+                  onClick={() => {
+                    if (!isLoggedIn) {
+                      navigate("/login");
+                    } else {
+                      setSelectedHotel(stay);
+                    }
+                  }}
                   className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded transition"
                 >
                   Book Now
@@ -150,6 +153,37 @@ const StayOptions = () => {
                   onChange={handleChange}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                 />
+              </div>
+
+              {/* Room Type Selection */}
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Room Type
+                </label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="roomType"
+                      value="AC"
+                      checked={form.roomType === "AC"}
+                      onChange={handleChange}
+                      className="text-cyan-600"
+                    />
+                    <span>AC Room</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="roomType"
+                      value="Non-AC"
+                      checked={form.roomType === "Non-AC"}
+                      onChange={handleChange}
+                      className="text-cyan-600"
+                    />
+                    <span>Non-AC Room</span>
+                  </label>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
