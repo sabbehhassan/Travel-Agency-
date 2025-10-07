@@ -1,4 +1,3 @@
-// middlewares/authMiddleware.js
 import jwt from "jsonwebtoken";
 import { supabase } from "../supabaseClient.js";
 
@@ -11,7 +10,9 @@ export default async function authMiddleware(req, res, next) {
   try {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
+
+    // ✅ Fix: ensure both id formats are supported
+    req.userId = decoded.id || decoded._id;
 
     if (decoded.role) {
       req.userRole = decoded.role;

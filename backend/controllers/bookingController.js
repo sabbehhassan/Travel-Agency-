@@ -16,18 +16,14 @@ export const customizeTrip = async (req, res) => {
   const { destination, days, nights, travelType, hotel, extras } = req.body;
 
   try {
-    // ✅ Basic validation
     if (!destination || !days || !nights) {
-      return res.status(400).json({ message: "Please fill all required fields." });
+      return res
+        .status(400)
+        .json({ message: "Please fill all required fields." });
     }
 
-    // ✅ Price Calculation
     let basePrice =
-      hotel === "Luxury"
-        ? 470000
-        : hotel === "Deluxe"
-        ? 340000
-        : 250000;
+      hotel === "Luxury" ? 470000 : hotel === "Deluxe" ? 340000 : 250000;
     if (travelType === "By Air") basePrice += 50000;
 
     const extrasCost =
@@ -37,7 +33,6 @@ export const customizeTrip = async (req, res) => {
 
     const totalPrice = basePrice + extrasCost;
 
-    // ✅ Insert into Supabase
     const { data, error } = await supabase
       .from("Trips")
       .insert([
@@ -65,7 +60,7 @@ export const customizeTrip = async (req, res) => {
 };
 
 // -------------------
-// Get All Bookings for logged-in user
+// Get All Trip Bookings for logged-in user
 // -------------------
 export const getUserBookings = async (req, res) => {
   try {
@@ -76,8 +71,6 @@ export const getUserBookings = async (req, res) => {
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-
-    // Keep consistent frontend response shape
     return res.json({ success: true, bookings: data });
   } catch (err) {
     return serverErr(res, err);
@@ -85,7 +78,7 @@ export const getUserBookings = async (req, res) => {
 };
 
 // -------------------
-// Cancel booking (user)
+// Cancel Trip Booking
 // -------------------
 export const cancelBooking = async (req, res) => {
   try {
@@ -108,38 +101,113 @@ export const cancelBooking = async (req, res) => {
 };
 
 // -------------------
-// Admin: Get all bookings (with user details)
+// ✅ HOTEL BOOKING CONTROLLERS
 // -------------------
-export const getAllBookingsAdmin = async (req, res) => {
+
+// Create hotel booking
+export const createHotelBooking = async (req, res) => {
   try {
-    if (req.userRole !== "admin") {
-      return res.status(403).json({ message: "Access denied. Admin only." });
-    }
+    const userId = req.userId;
+    const { hotelName, location, rooms, guests, checkIn, checkOut, roomType } =
+      req.body;
+
+    if (!userId)
+      return res.status(401).json({ message: "Unauthorized: user not found" });
+    if (!hotelName || !checkIn || !checkOut)
+      return res.status(400).json({ message: "Missing required fields" });
+
+    const bookingData = {
+      user_id: userId,
+      hotel_name: hotelName,
+      location: location || null,
+      rooms: Number(rooms) || 1,
+      guests: Number(guests) || 1,
+      check_in: checkIn,
+      check_out: checkOut,
+      room_type: roomType || "Standard",
+      status: "Pending",
+    };
 
     const { data, error } = await supabase
-      .from("Trips")
-      .select(
-        `id, destination, days, nights, travel_type, hotel_category, total_price, status, created_at, RegisterDetails(id, name, email)`
-      )
-      .order("created_at", { ascending: false });
+      .from("hotelbookings")
+      .insert([bookingData])
+      .select()
+      .single();
 
     if (error) throw error;
 
-    return res.json({ success: true, bookings: data });
+    res.status(201).json({
+      success: true,
+      message: "Hotel booking created successfully",
+      booking: data,
+    });
+  } catch (err) {
+    console.error("💥 createHotelBooking exception:", err.message || err);
+    res.status(500).json({ message: "Failed to create hotel booking" });
+  }
+};
+
+// Get user's hotel bookings
+export const getUserHotelBookings = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { data, error } = await supabase
+      .from("hotelbookings")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    res.json({ success: true, bookings: data });
+  } catch (err) {
+    console.error("Hotel bookings fetch error:", err.message);
+    res.status(500).json({ message: "Failed to fetch hotel bookings" });
+  }
+};
+
+// Cancel hotel booking
+export const cancelHotelBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { data, error } = await supabase
+      .from("hotelbookings")
+      .update({ status: "Cancelled" })
+      .eq("id", id)
+      .eq("user_id", req.userId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return res.json({ success: true, booking: data });
   } catch (err) {
     return serverErr(res, err);
   }
 };
 
 // -------------------
-// Admin: Update booking status
+// 🛠️ ADMIN CONTROLLERS
 // -------------------
+
+// Get all bookings (Trips + User details)
+export const getAllBookingsAdmin = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("Trips")
+      .select("*, RegisterDetails(id, name, email)")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return res.json({ success: true, bookings: data });
+  } catch (err) {
+    return serverErr(res, err);
+  }
+};
+
+// Update booking status
 export const updateBookingStatus = async (req, res) => {
   try {
-    if (req.userRole !== "admin") {
-      return res.status(403).json({ message: "Access denied. Admin only." });
-    }
-
     const { id } = req.params;
     const { status } = req.body;
 
@@ -151,7 +219,6 @@ export const updateBookingStatus = async (req, res) => {
       .single();
 
     if (error) throw error;
-
     return res.json({ success: true, booking: data });
   } catch (err) {
     return serverErr(res, err);
