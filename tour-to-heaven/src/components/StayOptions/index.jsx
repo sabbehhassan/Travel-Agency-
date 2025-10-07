@@ -4,7 +4,7 @@ import stayOptions from "../../data/stayoption";
 import { useNavigate } from "react-router-dom";
 
 const StayOptions = () => {
-  const { user, token, isLoggedIn } = useAuth();
+  const { token, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   const [selectedHotel, setSelectedHotel] = useState(null);
@@ -37,17 +37,20 @@ const StayOptions = () => {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/bookings", {
+      const res = await fetch("http://localhost:5000/api/bookings/hotel", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId: user._id,
           hotelName: selectedHotel.name,
           location: selectedHotel.location,
-          ...form,
+          rooms: form.rooms,
+          guests: form.guests,
+          checkIn: form.checkIn,
+          checkOut: form.checkOut,
+          roomType: form.roomType,
         }),
       });
 

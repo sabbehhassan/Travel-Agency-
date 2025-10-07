@@ -18,6 +18,7 @@ const UserDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("bookings");
   const [bookings, setBookings] = useState([]);
+  const [hotelBookings, setHotelBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // ✅ Logout
@@ -26,25 +27,24 @@ const UserDashboard = () => {
     navigate("/login");
   };
 
-  // ✅ Fetch bookings
+  // ✅ Fetch Customized Trip Bookings
   useEffect(() => {
     const fetchBookings = async () => {
       if (activeTab !== "bookings") return;
       try {
         if (!token) return navigate("/login");
+        setLoading(true);
 
         const res = await fetch("http://localhost:5000/api/bookings/bookings", {
-
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const data = await res.json();
         if (!res.ok)
           throw new Error(data.message || "Failed to fetch bookings");
-
         setBookings(data.bookings || []);
-      } catch (err) {
-        console.error("❌ Fetch error:", err.message);
+      } catch (error) {
+        console.error("❌ Trip fetch error:", error.message);
       } finally {
         setLoading(false);
       }
@@ -53,27 +53,60 @@ const UserDashboard = () => {
     fetchBookings();
   }, [token, navigate, activeTab]);
 
+  // ✅ Fetch Hotel Bookings
+  useEffect(() => {
+    const fetchHotelBookings = async () => {
+      if (activeTab !== "bookings") return;
+      try {
+        const res = await fetch(
+          "http://localhost:5000/api/bookings/hotel/user",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        const data = await res.json();
+        console.log("📦 Hotel Bookings Data:", data); // debug line
+        if (!res.ok)
+          throw new Error(data.message || "Failed to fetch hotel bookings");
+        setHotelBookings(data.bookings || []);
+      } catch (error) {
+        console.error("❌ Hotel fetch error:", error.message);
+      }
+    };
+
+    fetchHotelBookings();
+  }, [token, activeTab]);
+
   // ✅ Cancel booking
-  const handleCancel = async (id) => {
+  const handleCancel = async (id, type = "trip") => {
     if (!window.confirm("Are you sure you want to cancel this booking?"))
       return;
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/users/bookings/${id}/cancel`,
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const endpoint =
+        type === "trip"
+          ? `http://localhost:5000/api/users/bookings/${id}/cancel`
+          : `http://localhost:5000/api/bookings/hotel/${id}/cancel`;
+
+      const res = await fetch(endpoint, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to cancel booking");
 
-      setBookings((prev) =>
-        prev.map((b) => (b.id === id ? { ...b, status: "Cancelled" } : b))
-      );
-    } catch (err) {
-      console.error("❌ Cancel error:", err.message);
+      if (type === "trip") {
+        setBookings((prev) =>
+          prev.map((b) => (b.id === id ? { ...b, status: "Cancelled" } : b))
+        );
+      } else {
+        setHotelBookings((prev) =>
+          prev.map((h) => (h.id === id ? { ...h, status: "Cancelled" } : h))
+        );
+      }
+    } catch (error) {
+      console.error("❌ Cancel error:", error.message);
       alert("Failed to cancel booking");
     }
   };
@@ -150,19 +183,22 @@ const UserDashboard = () => {
           </h1>
         </div>
 
-        {/* Content Tabs */}
+        {/* =======================
+              BOOKINGS TAB
+        ======================= */}
         {activeTab === "bookings" && (
-          <div className="bg-white p-4 rounded-lg shadow">
-            <h2 className="text-lg sm:text-xl font-bold mb-4">My Bookings</h2>
-
-            {loading ? (
-              <p>Loading...</p>
-            ) : bookings.length === 0 ? (
-              <p className="text-gray-500">No bookings found.</p>
-            ) : (
-              <>
-                {/* ✅ Desktop View (Table) */}
-                <div className="hidden md:block overflow-x-auto">
+          <div className="bg-white p-4 rounded-lg shadow space-y-8">
+            {/* ✅ Customized Trips */}
+            <section>
+              <h2 className="text-lg sm:text-xl font-bold mb-4 text-cyan-700">
+                ✈️ Customized Trips
+              </h2>
+              {loading ? (
+                <p>Loading...</p>
+              ) : bookings.length === 0 ? (
+                <p className="text-gray-500">No customized trips found.</p>
+              ) : (
+                <div className="overflow-x-auto">
                   <table className="w-full border text-sm sm:text-base">
                     <thead>
                       <tr className="bg-gray-100 text-left">
@@ -172,7 +208,7 @@ const UserDashboard = () => {
                         <th className="p-2 border">Travel</th>
                         <th className="p-2 border">Status</th>
                         <th className="p-2 border">Price</th>
-                        <th className="p-2 border text-center">Action</th>
+                        <th className="p-2 border">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -203,8 +239,8 @@ const UserDashboard = () => {
                           <td className="p-2 border text-center">
                             {b.status === "Pending" && (
                               <button
-                                onClick={() => handleCancel(b.id)}
-                                className="px-2 sm:px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs sm:text-sm"
+                                onClick={() => handleCancel(b.id, "trip")}
+                                className="text-red-600 hover:underline"
                               >
                                 Cancel
                               </button>
@@ -215,68 +251,74 @@ const UserDashboard = () => {
                     </tbody>
                   </table>
                 </div>
+              )}
+            </section>
 
-                {/* ✅ Mobile View (Cards) */}
-                <div className="md:hidden space-y-4">
-                  {bookings.map((b) => (
-                    <div
-                      key={b.id}
-                      className="border rounded-lg p-4 shadow-sm bg-gray-50 hover:bg-gray-100 transition-all duration-200"
-                    >
-                      <div className="flex justify-between items-center mb-2">
-                        <h3 className="font-semibold text-cyan-700 text-lg">
-                          {b.destination}
-                        </h3>
-                        <span
-                          className={`text-xs font-bold px-2 py-1 rounded ${
-                            b.status === "Confirmed"
-                              ? "bg-cyan-100 text-cyan-600"
-                              : b.status === "Completed"
-                              ? "bg-green-100 text-green-600"
-                              : b.status === "Cancelled"
-                              ? "bg-red-100 text-red-600"
-                              : "bg-gray-100 text-gray-600"
-                          }`}
-                        >
-                          {b.status}
-                        </span>
-                      </div>
-
-                      <div className="text-gray-700 text-sm space-y-1">
-                        <p>
-                          <span className="font-medium">Duration:</span>{" "}
-                          {b.days} Days / {b.nights} Nights
-                        </p>
-                        <p>
-                          <span className="font-medium">Hotel:</span>{" "}
-                          {b.hotel_category}
-                        </p>
-                        <p>
-                          <span className="font-medium">Travel:</span>{" "}
-                          {b.travel_type}
-                        </p>
-                        <p>
-                          <span className="font-medium">Price:</span> Rs.{" "}
-                          {b.total_price?.toLocaleString()}
-                        </p>
-                      </div>
-
-                      {b.status === "Pending" && (
-                        <button
-                          onClick={() => handleCancel(b.id)}
-                          className="w-full mt-3 bg-red-500 text-white py-1.5 rounded hover:bg-red-600 transition-all duration-200 text-sm"
-                        >
-                          Cancel Booking
-                        </button>
-                      )}
-                    </div>
-                  ))}
+            {/* ✅ Hotel Bookings */}
+            <section>
+              <h2 className="text-lg sm:text-xl font-bold mb-4 text-cyan-700">
+                🏨 Hotel Bookings
+              </h2>
+              {hotelBookings.length === 0 ? (
+                <p className="text-gray-500">No hotel bookings found.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full border text-sm sm:text-base">
+                    <thead>
+                      <tr className="bg-gray-100 text-left">
+                        <th className="p-2 border">Hotel Name</th>
+                        <th className="p-2 border">Location</th>
+                        <th className="p-2 border">Room Type</th>
+                        <th className="p-2 border">Guests</th>
+                        <th className="p-2 border">Check In</th>
+                        <th className="p-2 border">Check Out</th>
+                        <th className="p-2 border">Status</th>
+                        <th className="p-2 border">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {hotelBookings.map((h) => (
+                        <tr key={h.id} className="hover:bg-gray-50">
+                          <td className="p-2 border">{h.hotel_name}</td>
+                          <td className="p-2 border">{h.location}</td>
+                          <td className="p-2 border">{h.room_type}</td>
+                          <td className="p-2 border">{h.guests}</td>
+                          <td className="p-2 border">{h.check_in}</td>
+                          <td className="p-2 border">{h.check_out}</td>
+                          <td
+                            className={`p-2 border font-semibold ${
+                              h.status === "Confirmed"
+                                ? "text-cyan-600"
+                                : h.status === "Completed"
+                                ? "text-green-600"
+                                : h.status === "Cancelled"
+                                ? "text-red-600"
+                                : "text-gray-600"
+                            }`}
+                          >
+                            {h.status}
+                          </td>
+                          <td className="p-2 border text-center">
+                            {h.status === "Pending" && (
+                              <button
+                                onClick={() => handleCancel(h.id, "hotel")}
+                                className="text-red-600 hover:underline"
+                              >
+                                Cancel
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              </>
-            )}
+              )}
+            </section>
           </div>
         )}
 
+        {/* Profile & Settings */}
         {activeTab === "profile" && <ProfilePage embedded />}
         {activeTab === "settings" && (
           <div className="bg-white p-6 rounded-lg shadow">
