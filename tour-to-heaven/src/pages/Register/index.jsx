@@ -134,12 +134,13 @@ const Register = () => {
 
       {/* Right Side - Image */}
       <div className="hidden lg:flex flex-1">
-        <img
-          src="https://images.unsplash.com/photo-1501785888041-af3ef285b470"
-          alt="Travel Sign Up"
-          className="w-full h-full object-cover"
-        />
-      </div>
+  <img
+    src="/assets/signuppic/bike.jpg"
+    alt="Travel Sign Up"
+    className="w-full h-full object-cover"
+  />
+</div>
+
     </div>
   );
 };

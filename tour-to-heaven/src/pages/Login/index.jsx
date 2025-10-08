@@ -8,7 +8,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // ✅ sirf login lena
+  const { login } = useAuth();
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,30 +17,15 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:5000/api/users/login", {
-        email: formData.email,
-        password: formData.password,
-      });
-
-      setMessage("✅ Login successful!");
-      console.log("User:", res.data);
-
-      // API response me se user + token
+      const res = await axios.post("http://localhost:5000/api/users/login", formData);
       const { user, token } = res.data;
 
-      // Save in localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-
-      // Update context
       login(user, token);
 
-      // ✅ Navigate based on role
-      if (user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/dashboard");
-      }
+      setMessage("✅ Login successful!");
+      navigate(user.role === "admin" ? "/admin-dashboard" : "/dashboard");
     } catch (err) {
       setMessage(`❌ ${err.response?.data?.message || "Login failed"}`);
     }
@@ -48,7 +33,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Left Side - Form */}
+      {/* Left Side - Form Section */}
       <div className="flex-1 flex items-center justify-center bg-white px-3 py-4 sm:px-2 lg:p-8">
         <div className="w-full max-w-md">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
@@ -84,6 +69,7 @@ const Login = () => {
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none"
               placeholder="Password"
             />
+
             <div className="text-right">
               <a
                 href="/forgot-password"
@@ -92,6 +78,7 @@ const Login = () => {
                 Forgot your password?
               </a>
             </div>
+
             <button
               type="submit"
               className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-2 rounded-lg font-semibold transition"
@@ -100,6 +87,7 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Social Login Buttons */}
           <div className="mt-6 flex items-center justify-between gap-3">
             <button className="flex-1 flex items-center justify-center border rounded-lg py-2 hover:bg-gray-100 transition">
               <FaGoogle className="text-red-500 mr-2" /> Google
@@ -118,11 +106,11 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Right Side - Image */}
-      <div className="hidden lg:flex flex-1">
+      {/* ✅ Right Side - Shangrila Image */}
+      <div className="hidden lg:flex flex-1 relative">
         <img
-          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
-          alt="Travel Login"
+          src="/assets/Loginpic/shangrila.jpg"
+          alt="Shangrila Resort"
           className="w-full h-full object-cover"
         />
       </div>
