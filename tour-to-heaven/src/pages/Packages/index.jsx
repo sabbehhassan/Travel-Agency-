@@ -6,7 +6,7 @@ const PackagesPage = () => {
     <div className="bg-gray-50 min-h-screen">
       {/* 🌄 Hero Section */}
       <section
-        className="relative h-[70vh] md:h-[80vh] bg-cover bg-center flex items-center justify-center"
+        className="relative h-[70vh] md:h-[95vh] bg-cover bg-center flex items-center justify-center"
         style={{
           backgroundImage: "url('/assets/bg/minimarg.jpg')",
         }}
@@ -32,8 +32,8 @@ const PackagesPage = () => {
             Choose Your Travel Style
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Whether you seek adventure, family fun, or romantic escapes —
-            we’ve got the perfect plan for you.
+            Whether you seek adventure, family fun, or romantic escapes — we’ve
+            got the perfect plan for you.
           </p>
         </div>
 
@@ -42,33 +42,37 @@ const PackagesPage = () => {
             {
               title: "🏔️ Adventure Tours",
               desc: "For thrill-seekers — hiking, trekking, and mountain exploration.",
-              img: "/assets/travel/adventure.jpg",
+              img: "/assets/Trips/adventuretrip.jpg",
             },
             {
               title: "👨‍👩‍👧 Family Trips",
               desc: "Comfortable and fun family packages with safe accommodations.",
-              img: "/assets/travel/family.jpg",
+              img: "/assets/Trips/familytrip.jpg",
             },
             {
               title: "💞 Honeymoon Escapes",
               desc: "Romantic getaways to serene lakes and cozy mountain lodges.",
-              img: "/assets/travel/honeymoon.jpg",
+              img: "/assets/Trips/honeymoon.jpg",
             },
             {
               title: "🏕️ Cultural Tours",
               desc: "Discover heritage, festivals, and traditions of Gilgit Baltistan.",
-              img: "/assets/travel/culture.jpg",
+              img: "/assets/Trips/culture.jpeg",
             },
           ].map((style, index) => (
             <div
               key={index}
               className="bg-gray-100 rounded-2xl overflow-hidden shadow hover:shadow-2xl transition duration-300 group"
             >
-              <img
-                src={style.img}
-                alt={style.title}
-                className="h-48 w-full object-cover group-hover:scale-105 transition duration-300"
-              />
+              {/* 🖼 Fix: Maintain consistent image ratio */}
+              <div className="h-56 w-full overflow-hidden">
+                <img
+                  src={style.img}
+                  alt={style.title}
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition duration-300"
+                />
+              </div>
+
               <div className="p-6 text-left">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
                   {style.title}
@@ -80,8 +84,10 @@ const PackagesPage = () => {
         </div>
       </section>
 
-
- 
+      {/* ✨ Add the TourPackages Component */}
+      <section className="py-16 bg-gray-50 px-6">
+        <TourPackages />
+      </section>
 
       {/* 💡 Travel Tips Section */}
       <section className="py-16 bg-white px-6">
