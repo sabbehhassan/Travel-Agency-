@@ -12,7 +12,9 @@ const AuthContext = createContext(null);
  * - Exposes login/logout/updateProfile/changePassword
  */
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(() => localStorage.getItem("token") || null);
+  const [token, setToken] = useState(
+    () => localStorage.getItem("token") || null
+  );
   const [user, setUser] = useState(() => {
     const s = localStorage.getItem("user");
     return s ? JSON.parse(s) : null;
@@ -60,9 +62,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setToken(null);
     setUser(null);
-    // effect will clear localStorage
   };
 
   /**
@@ -133,7 +136,6 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: err.message };
     }
   };
-  
 
   return (
     <AuthContext.Provider

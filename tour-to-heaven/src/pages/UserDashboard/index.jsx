@@ -51,24 +51,26 @@ const UserDashboard = () => {
     fetchBookings();
   }, [token, activeTab, navigate]);
 
-  // ✅ Fetch Hotel Bookings
-  useEffect(() => {
-    const fetchHotelBookings = async () => {
-      if (activeTab !== "bookings") return;
-      try {
-        const res = await fetch("http://localhost:5000/api/bookings/hotel/user", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        if (!res.ok)
-          throw new Error(data.message || "Failed to fetch hotel bookings");
-        setHotelBookings(data.bookings || []);
-      } catch (err) {
-        console.error("❌ Hotel fetch error:", err.message);
-      }
-    };
-    fetchHotelBookings();
-  }, [token, activeTab]);
+ // ✅ Fetch Hotel Bookings
+useEffect(() => {
+  const fetchHotelBookings = async () => {
+    if (activeTab !== "bookings") return;
+    if (!token) return; // ✅ Prevent fetch when token is null (after logout)
+
+    try {
+      const res = await fetch("http://localhost:5000/api/bookings/hotel/user", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (!res.ok)
+        throw new Error(data.message || "Failed to fetch hotel bookings");
+      setHotelBookings(data.bookings || []);
+    } catch (err) {
+      console.error("❌ Hotel fetch error:", err.message);
+    }
+  };
+  fetchHotelBookings();
+}, [token, activeTab]);
 
   // ✅ Cancel Booking
   const handleCancel = async (id, type = "trip") => {
