@@ -1,5 +1,6 @@
 import React from "react";
 import PopularDestinations from "../../components/PopularDestinations";
+import TourPackages from "../../components/TourPackages";
 
 const DestinationsPage = () => {
   return (
@@ -28,6 +29,9 @@ const DestinationsPage = () => {
       <div className="max-w-7xl mx-auto mt-12 px-4">
         <PopularDestinations />
       </div>
+
+           {/* 🎒 Customization Section */}
+      <TourPackages />
 
       {/* Travel Info Section */}
       <section className="py-16 px-6 bg-white">
