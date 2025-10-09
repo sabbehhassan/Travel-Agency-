@@ -13,6 +13,7 @@ import CustomizeTrip from "../pages/CustomizeTrip";
 import AdminDashboard from "../pages/AdminDashboard";
 import Destination from "../pages/Destination";
 import Packages from "../pages/Packages"
+import AllReviews from "../pages/AllReviews";
 
 // Layout ke andar ScrollToTop wrap karenge
 const withScrollToTop = (element) => (
@@ -36,7 +37,8 @@ const router = createBrowserRouter([
       { path: "customize-trip", element: <CustomizeTrip /> },
       { path: "admin-dashboard", element: <AdminDashboard /> },
       {path: "destinations", element: <Destination />},
-      {path: "packages", element: <Packages/>}
+      {path: "packages", element: <Packages/>},
+      {path: "reviews", element: <AllReviews />}
     ],
   },
 ]);

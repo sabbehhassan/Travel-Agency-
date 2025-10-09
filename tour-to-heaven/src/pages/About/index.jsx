@@ -31,7 +31,8 @@ const About = () => {
         <div className="absolute inset-0 bg-black opacity-30"></div>
         <div className="relative z-10 max-w-4xl mx-auto px-6">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-            Discover the World with <span className="text-yellow-300">Tour to Heaven</span>
+            Discover the World with{" "}
+            <span className="text-yellow-300">Tour to Heaven</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-100">
             4 years of experience in crafting flexible, reliable, and memorable
@@ -42,29 +43,30 @@ const About = () => {
 
       {/* About Description */}
       <section className="py-20 px-6 md:px-20 grid md:grid-cols-2 gap-12 items-center">
-        <div>
+        <div className="flex justify-center items-center">
           <img
-            src="/assets/about/travel.jpg"
+            src="/assets/bg/cover.jpg"
             alt="About Tour to Heaven"
-            className="rounded-2xl shadow-lg w-full object-cover"
+            className="rounded-2xl w-full md:w-auto max-w-lg h-auto md:h-[360px] object-cover object-center"
           />
         </div>
+
         <div>
-          <h2 className="text-3xl font-bold mb-4 text-cyan-700">
-            Who We Are
-          </h2>
+          <h2 className="text-3xl font-bold mb-4 text-cyan-700">Who We Are</h2>
           <p className="text-gray-600 mb-4 leading-relaxed">
-            At <span className="font-semibold text-cyan-700">Tour to Heaven</span>, 
-            we believe travel is more than just sightseeing — it’s about connection, 
-            adventure, and unforgettable memories. For the past 4 years, 
-            we’ve guided thousands of local and international travelers through 
-            Pakistan’s most breathtaking destinations.
+            At{" "}
+            <span className="font-semibold text-cyan-700">Tour to Heaven</span>,
+            we believe travel is more than just sightseeing — it’s about
+            connection, adventure, and unforgettable memories. For the past 4
+            years, we’ve guided thousands of local and international travelers
+            through Pakistan’s most breathtaking destinations.
           </p>
           <p className="text-gray-600 leading-relaxed">
-            From customized tour packages to hotel bookings and adventure trips, 
-            we handle everything with flexibility, trust, and reliability. 
-            Whether you’re seeking peaceful valleys, thrilling treks, 
-            or cultural experiences — we make your journey seamless and full of joy.
+            From customized tour packages to hotel bookings and adventure trips,
+            we handle everything with flexibility, trust, and reliability.
+            Whether you’re seeking peaceful valleys, thrilling treks, or
+            cultural experiences — we make your journey seamless and full of
+            joy.
           </p>
         </div>
       </section>
@@ -80,8 +82,8 @@ const About = () => {
               🌍 Expert Local Guidance
             </h3>
             <p className="text-gray-600">
-              Our experienced guides know every hidden gem and ensure 
-              an authentic travel experience for both locals and foreigners.
+              Our experienced guides know every hidden gem and ensure an
+              authentic travel experience for both locals and foreigners.
             </p>
           </div>
           <div className="bg-white shadow-md rounded-xl p-6 hover:shadow-xl transition">
@@ -89,7 +91,7 @@ const About = () => {
               🏨 Reliable Hotel Booking
             </h3>
             <p className="text-gray-600">
-              We provide comfortable, verified, and affordable hotel bookings 
+              We provide comfortable, verified, and affordable hotel bookings
               that fit your budget and style — no stress, just comfort.
             </p>
           </div>
@@ -98,7 +100,7 @@ const About = () => {
               🕒 Flexible & Safe Trips
             </h3>
             <p className="text-gray-600">
-              We customize trips according to your time, needs, and preferences 
+              We customize trips according to your time, needs, and preferences
               — offering safety, flexibility, and reliability at every step.
             </p>
           </div>
@@ -136,7 +138,8 @@ const About = () => {
           Let’s Make Your Next Trip Unforgettable!
         </h2>
         <p className="mb-6 text-gray-100">
-          Whether you’re exploring locally or traveling abroad — we’ve got you covered.
+          Whether you’re exploring locally or traveling abroad — we’ve got you
+          covered.
         </p>
         <a
           href="/contact"
