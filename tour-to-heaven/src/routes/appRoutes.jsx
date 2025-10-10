@@ -14,6 +14,7 @@ import AdminDashboard from "../pages/AdminDashboard";
 import Destination from "../pages/Destination";
 import Packages from "../pages/Packages"
 import AllReviews from "../pages/AllReviews";
+import Contact from "../pages/Contact";
 
 // Layout ke andar ScrollToTop wrap karenge
 const withScrollToTop = (element) => (
@@ -38,7 +39,8 @@ const router = createBrowserRouter([
       { path: "admin-dashboard", element: <AdminDashboard /> },
       {path: "destinations", element: <Destination />},
       {path: "packages", element: <Packages/>},
-      {path: "reviews", element: <AllReviews />}
+      {path: "reviews", element: <AllReviews />},
+      {path: "contact", element: <Contact />}
     ],
   },
 ]);
