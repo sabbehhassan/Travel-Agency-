@@ -1,11 +1,11 @@
 {
   "version": 2,
   "builds": [
-    { "src": "index.js", "use": "@vercel/node" },
+    { "src": "server.js", "use": "@vercel/node" },
     { "src": "tour-to-heaven/dist/**", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/index.js" },
-    { "src": "/(.*)", "dest": "tour-to-heaven/dist/$1" }
+    { "src": "/api/(.*)", "dest": "server.js" },
+    { "src": "/(.*)", "dest": "/tour-to-heaven/dist/$1" }
   ]
 }
