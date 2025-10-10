@@ -4,6 +4,7 @@ import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import testimonialRoutes from "./routes/testimonialRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/testimonials", testimonialRoutes); 
+app.use("/api/contact", contactRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Default Route
 app.get("/", (req, res) => {
