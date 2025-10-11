@@ -5,7 +5,7 @@
     { "src": "tour-to-heaven/dist/**", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "server.js" },
+    { "src": "/api/(.*)", "dest": "/server.js" },
     { "src": "/(.*)", "dest": "/tour-to-heaven/dist/$1" }
   ]
 }
