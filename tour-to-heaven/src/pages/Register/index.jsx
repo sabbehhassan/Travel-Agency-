@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import axios from "axios";
 
+
 const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -25,7 +26,7 @@ const Register = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/users/register", {
+      const res = await axios.post("http://VITE_API_BASE_URL/api/users/register", {
         name: formData.name,
         email: formData.email,
         password: formData.password,

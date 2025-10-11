@@ -29,13 +29,13 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/contact", contactRoutes);
 
 // ✅ Serve frontend build
-const frontendPath = path.join(__dirname, "../tour-to-heaven/dist");
+const frontendPath = path.join(__dirname, "./dist");
 app.use(express.static(frontendPath));
 
-// ✅ Handle all non-API routes (Express 5 fix)
-app.get(/.*/, (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
+
 
 
 // export instead of listen

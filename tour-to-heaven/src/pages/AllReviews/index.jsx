@@ -7,7 +7,7 @@ const AllReviews = () => {
 
   const fetchAllTestimonials = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/testimonials");
+      const res = await fetch("http://VITE_API_BASE_URL/api/testimonials");
       const data = await res.json();
       setTestimonials(Array.isArray(data) ? data : []);
     } catch (error) {

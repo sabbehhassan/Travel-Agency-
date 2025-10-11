@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 
+
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
@@ -17,7 +18,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:5000/api/users/login", formData);
+      const res = await axios.post("http://VITE_API_BASE_URL/api/users/login", formData);
       const { user, token } = res.data;
 
       localStorage.setItem("token", token);

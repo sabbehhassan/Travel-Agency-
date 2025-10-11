@@ -36,11 +36,12 @@ const UserDashboard = () => {
         if (!token) return navigate("/login");
         setLoading(true);
 
-        const res = await fetch("http://localhost:5000/api/bookings/bookings", {
+        const res = await fetch("http://VITE_API_BASE_URL/api/bookings/bookings", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Failed to fetch bookings");
+        if (!res.ok)
+          throw new Error(data.message || "Failed to fetch bookings");
         setBookings(data.bookings || []);
       } catch (err) {
         console.error("❌ Trip fetch error:", err.message);
@@ -51,35 +52,39 @@ const UserDashboard = () => {
     fetchBookings();
   }, [token, activeTab, navigate]);
 
- // ✅ Fetch Hotel Bookings
-useEffect(() => {
-  const fetchHotelBookings = async () => {
-    if (activeTab !== "bookings") return;
-    if (!token) return; // ✅ Prevent fetch when token is null (after logout)
+  // ✅ Fetch Hotel Bookings
+  useEffect(() => {
+    const fetchHotelBookings = async () => {
+      if (activeTab !== "bookings") return;
+      if (!token) return; // ✅ Prevent fetch when token is null (after logout)
 
-    try {
-      const res = await fetch("http://localhost:5000/api/bookings/hotel/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (!res.ok)
-        throw new Error(data.message || "Failed to fetch hotel bookings");
-      setHotelBookings(data.bookings || []);
-    } catch (err) {
-      console.error("❌ Hotel fetch error:", err.message);
-    }
-  };
-  fetchHotelBookings();
-}, [token, activeTab]);
+      try {
+        const res = await fetch(
+          "http://VITE_API_BASE_URL/api/bookings/hotel/user",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const data = await res.json();
+        if (!res.ok)
+          throw new Error(data.message || "Failed to fetch hotel bookings");
+        setHotelBookings(data.bookings || []);
+      } catch (err) {
+        console.error("❌ Hotel fetch error:", err.message);
+      }
+    };
+    fetchHotelBookings();
+  }, [token, activeTab]);
 
   // ✅ Cancel Booking
   const handleCancel = async (id, type = "trip") => {
-    if (!window.confirm("Are you sure you want to cancel this booking?")) return;
+    if (!window.confirm("Are you sure you want to cancel this booking?"))
+      return;
     try {
       const endpoint =
         type === "trip"
-          ? `http://localhost:5000/api/users/bookings/${id}/cancel`
-          : `http://localhost:5000/api/bookings/hotel/${id}/cancel`;
+          ? `http://VITE_API_BASE_URL/api/users/bookings/${id}/cancel`
+          : `http://VITE_API_BASE_URL/api/bookings/hotel/${id}/cancel`;
 
       const res = await fetch(endpoint, {
         method: "PUT",
@@ -108,7 +113,9 @@ useEffect(() => {
       {/* Sidebar */}
       <aside
         className={`fixed md:static top-0 left-0 h-full w-64 bg-white shadow-md transform transition-transform duration-300 z-50 
-        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+        ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
       >
         <div className="flex items-center justify-between p-4 border-b">
           <span className="text-xl font-bold text-cyan-600">Dashboard</span>
@@ -396,7 +403,9 @@ useEffect(() => {
         {activeTab === "settings" && (
           <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-bold mb-4">Settings</h2>
-            <p className="text-gray-600">Settings options will appear here...</p>
+            <p className="text-gray-600">
+              Settings options will appear here...
+            </p>
           </div>
         )}
       </main>

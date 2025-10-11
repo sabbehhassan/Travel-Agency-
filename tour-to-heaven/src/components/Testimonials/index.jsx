@@ -18,7 +18,7 @@ const Testimonials = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/testimonials");
+      const res = await fetch("http://VITE_API_BASE_URL/api/testimonials");
       const data = await res.json();
 
       // Filter: Only ratings >= 4
@@ -56,7 +56,7 @@ const Testimonials = () => {
 
     try {
       setSubmitting(true);
-      const res = await fetch("http://localhost:5000/api/testimonials", {
+      const res = await fetch("http://VITE_API_BASE_URL/api/testimonials", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
