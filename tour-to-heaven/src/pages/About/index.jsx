@@ -45,7 +45,7 @@ const About = () => {
       <section className="py-20 px-6 md:px-20 grid md:grid-cols-2 gap-12 items-center">
         <div className="flex justify-center items-center">
           <img
-            src="/assets/bg/cover.jpg"
+            src="/assets/bg/cover-min.jpg"
             alt="About Tour to Heaven"
             className="rounded-2xl w-full md:w-auto max-w-lg h-auto md:h-[360px] object-cover object-center"
           />

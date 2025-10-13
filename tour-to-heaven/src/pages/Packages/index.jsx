@@ -8,7 +8,7 @@ const PackagesPage = () => {
       <section
         className="relative h-[70vh] md:h-[95vh] bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage: "url('/assets/bg/minimarg.jpg')",
+          backgroundImage: "url('/assets/bg/minimarg-min.jpg')",
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/40"></div>
@@ -42,22 +42,22 @@ const PackagesPage = () => {
             {
               title: "🏔️ Adventure Tours",
               desc: "For thrill-seekers — hiking, trekking, and mountain exploration.",
-              img: "/assets/Trips/adventuretrip.jpg",
+              img: "/assets/Trips/adventuretrip-min.jpg",
             },
             {
               title: "👨‍👩‍👧 Family Trips",
               desc: "Comfortable and fun family packages with safe accommodations.",
-              img: "/assets/Trips/familytrip.jpg",
+              img: "/assets/Trips/familytrip-min.jpg",
             },
             {
               title: "💞 Honeymoon Escapes",
               desc: "Romantic getaways to serene lakes and cozy mountain lodges.",
-              img: "/assets/Trips/honeymoon.jpg",
+              img: "/assets/Trips/honeymoon-min.jpg",
             },
             {
               title: "🏕️ Cultural Tours",
               desc: "Discover heritage, festivals, and traditions of Gilgit Baltistan.",
-              img: "/assets/Trips/culture.jpeg",
+              img: "/assets/Trips/culture-min.jpeg",
             },
           ].map((style, index) => (
             <div

@@ -109,7 +109,7 @@ const Login = () => {
       {/* ✅ Right Side - Shangrila Image */}
       <div className="hidden lg:flex flex-1 relative">
         <img
-          src="/assets/Loginpic/shangrila.jpg"
+          src="/assets/Loginpic/shangrila-min.jpg"
           alt="Shangrila Resort"
           className="w-full h-full object-cover"
         />
