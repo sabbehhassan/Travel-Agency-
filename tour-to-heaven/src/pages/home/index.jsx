@@ -1,10 +1,10 @@
 import React from "react";
 import HeroSection from "../../components/heroSection";
-import PopularDestinations from "../../components/PopularDestinations";
-import TourPackages from "../../components/TourPackages";
-import Testimonials from "../../components/Testimonials";
-import Gallery from "../../components/Gallery";
-import StayOptions from "../../components/StayOptions";
+import PopularDestinations from "../../components/popularDestinations";
+import TourPackages from "../../components/tourPackages";
+import Testimonials from "../../components/testimonials";
+import Gallery from "../../components/gallery";
+import StayOptions from "../../components/stayOptions";
 
 const Home = () => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
-import PopularDestinations from "../../components/PopularDestinations";
-import TourPackages from "../../components/TourPackages";
+import PopularDestinations from "../../components/popularDestinations";
+import TourPackages from "../../components/tourPackages";
 
 const DestinationsPage = () => {
   return (

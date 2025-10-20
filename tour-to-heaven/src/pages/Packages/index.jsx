@@ -1,5 +1,5 @@
 import React from "react";
-import TourPackages from "../../components/TourPackages";
+import TourPackages from "../../components/tourPackages";
 
 const PackagesPage = () => {
   return (

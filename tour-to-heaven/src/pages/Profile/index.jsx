@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../Context/AuthContext";
+import { useAuth } from "../../context/authContext";
 import {
   UserIcon,
   LockClosedIcon,
