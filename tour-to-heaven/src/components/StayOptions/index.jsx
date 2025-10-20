@@ -37,22 +37,25 @@ const StayOptions = () => {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/bookings/hotel", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          hotelName: selectedHotel.name,
-          location: selectedHotel.location,
-          rooms: form.rooms,
-          guests: form.guests,
-          checkIn: form.checkIn,
-          checkOut: form.checkOut,
-          roomType: form.roomType,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/bookings/hotel`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            hotelName: selectedHotel.name,
+            location: selectedHotel.location,
+            rooms: form.rooms,
+            guests: form.guests,
+            checkIn: form.checkIn,
+            checkOut: form.checkOut,
+            roomType: form.roomType,
+          }),
+        }
+      );
 
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "Booking failed.");

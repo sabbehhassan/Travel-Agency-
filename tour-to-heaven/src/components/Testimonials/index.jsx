@@ -18,7 +18,9 @@ const Testimonials = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/api/testimonials");
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/testimonials`
+      );
       const data = await res.json();
 
       // Filter: Only ratings >= 4
@@ -27,9 +29,7 @@ const Testimonials = () => {
       );
 
       // Shuffle randomly and pick 3
-      const randomThree = highRated
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 3);
+      const randomThree = highRated.sort(() => 0.5 - Math.random()).slice(0, 3);
 
       setTestimonials(randomThree);
     } catch (error) {
@@ -56,15 +56,18 @@ const Testimonials = () => {
 
     try {
       setSubmitting(true);
-      const res = await fetch("http://localhost:5000/api/testimonials", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: user.id,
-          rating,
-          review,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/testimonials`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: user.id,
+            rating,
+            review,
+          }),
+        }
+      );
 
       const data = await res.json();
       if (res.ok) {
@@ -205,9 +208,7 @@ const Testimonials = () => {
                       ))}
                     </div>
 
-                    <p className="text-gray-600 text-sm italic">
-                      “{t.review}”
-                    </p>
+                    <p className="text-gray-600 text-sm italic">“{t.review}”</p>
                   </div>
                 </div>
               ))}

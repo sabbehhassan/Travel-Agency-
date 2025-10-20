@@ -36,7 +36,7 @@ const UserDashboard = () => {
         if (!token) return navigate("/login");
         setLoading(true);
 
-        const res = await fetch("http://localhost:5000/api/bookings/bookings", {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/bookings/bookings`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -58,7 +58,7 @@ useEffect(() => {
     if (!token) return; // ✅ Prevent fetch when token is null (after logout)
 
     try {
-      const res = await fetch("http://localhost:5000/api/bookings/hotel/user", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/bookings/hotel/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -78,8 +78,8 @@ useEffect(() => {
     try {
       const endpoint =
         type === "trip"
-          ? `http://localhost:5000/api/users/bookings/${id}/cancel`
-          : `http://localhost:5000/api/bookings/hotel/${id}/cancel`;
+          ? `${import.meta.env.VITE_BACKEND_URL}/api/users/bookings/${id}/cancel`
+          : `${import.meta.env.VITE_BACKEND_URL}/api/bookings/hotel/${id}/cancel`;
 
       const res = await fetch(endpoint, {
         method: "PUT",

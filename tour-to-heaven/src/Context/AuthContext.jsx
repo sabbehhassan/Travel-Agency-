@@ -1,7 +1,7 @@
 // src/Context/AuthContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-const API_BASE = "http://localhost:5000/api/users";
+const API_BASE = `${import.meta.env.VITE_BACKEND_URL}/api/users`;
 
 const AuthContext = createContext(null);
 

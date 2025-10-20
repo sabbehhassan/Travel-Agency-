@@ -31,7 +31,7 @@ const AdminDashboard = () => {
   // ✅ Fetch Tour Bookings
   const fetchTourBookings = useCallback(async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/bookings/admin/bookings", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/bookings/admin/bookings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
   // ✅ Fetch Hotel Bookings
   const fetchHotelBookings = useCallback(async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/bookings/admin/hotelbookings", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/bookings/admin/hotelbookings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -80,8 +80,8 @@ const AdminDashboard = () => {
     try {
       const endpoint =
         type === "hotel"
-          ? `http://localhost:5000/api/bookings/admin/hotelbookings/${id}/status`
-          : `http://localhost:5000/api/bookings/admin/bookings/${id}/status`;
+          ? `${import.meta.env.VITE_BACKEND_URL}/api/bookings/admin/hotelbookings/${id}/status`
+          : `${import.meta.env.VITE_BACKEND_URL}/api/bookings/admin/bookings/${id}/status`;
 
       const res = await fetch(endpoint, {
         method: "PUT",
