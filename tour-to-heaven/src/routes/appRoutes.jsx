@@ -6,14 +6,14 @@ import Home from "../pages/home/index.jsx";
 import About from "../pages/about/index.jsx";
 import Login from "../pages/login/index.jsx";
 import Register from "../pages/register/index.jsx";
-import UserDashboard from "../pages/userDashboard/index.jsx";
+import UserDashboard from "../pages/userdashbaord/index.jsx";
 import ProfilePage from "../pages/profile/index.jsx";
 import ScrollToTop from "../components/scrolltotop/index.jsx";
-import CustomizeTrip from "../pages/customizeTrip/index.jsx";
-import AdminDashboard from "../pages/adminDashboard/index.jsx";
+import CustomizeTrip from "../pages/customizetrip/index.jsx";
+import AdminDashboard from "../pages/admindashboard/index.jsx";
 import Destination from "../pages/destination/index.jsx";
 import Packages from "../pages/packages/index.jsx"
-import AllReviews from "../pages/allReviews/index.jsx";
+import AllReviews from "../pages/allreviews/index.jsx";
 import Contact from "../pages/contact/index.jsx";
 
 // Layout ke andar ScrollToTop wrap karenge
