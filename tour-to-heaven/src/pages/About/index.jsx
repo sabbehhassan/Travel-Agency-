@@ -47,7 +47,7 @@ const About = () => {
           <img
             src="/assets/bg/cover-min.jpg"
             alt="About Tour to Heaven"
-            className="rounded-2xl w-full md:w-auto max-w-lg h-auto md:h-[360px] object-cover object-center"
+            className="rounded-2xl w-full md:w-auto max-w-lg h-auto md:h-[362px] object-cover object-center"
           />
         </div>
 
