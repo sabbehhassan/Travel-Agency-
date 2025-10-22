@@ -12,7 +12,7 @@ import CustomizeTrip from "../pages/customTrip/index.jsx";
 import AdminDashboard from "../pages/adminDash/index.jsx";
 import Destination from "../pages/Destination/index.jsx";
 import Packages from "../pages/Packages/index.jsx";
-import AllReviews from "../pages/allreviews/index.jsx";
+import AllReviews from "../pages/allReviews/index.jsx";
 import Contact from "../pages/contact/index.jsx";
 
 // Wrap layout with ScrollToTop
