@@ -4,7 +4,7 @@ import Layout from "../layout/index.jsx";
 import Home from "../pages/home/index.jsx";
 import About from "../pages/About/index.jsx";
 import Login from "../pages/Login/index.jsx";
-import Register from "../pages/register/index.jsx";
+import Register from "../pages/Register/index.jsx";
 import UserDashboard from "../pages/UserDash/index.jsx";
 import ProfilePage from "../pages/profile/index.jsx";
 import ScrollToTop from "../components/scrolltotop/index.jsx";
