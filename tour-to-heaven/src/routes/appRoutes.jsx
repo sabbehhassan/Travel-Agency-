@@ -13,7 +13,7 @@ import AdminDashboard from "../pages/adminDash/index.jsx";
 import Destination from "../pages/Destination/index.jsx";
 import Packages from "../pages/Packages/index.jsx";
 import AllReviews from "../pages/Reviews/index.jsx";
-import Contact from "../pages/contact/index.jsx";
+import Contact from "../pages/Contact/index.jsx";
 
 // Wrap layout with ScrollToTop
 const withScrollToTop = (element) => (
