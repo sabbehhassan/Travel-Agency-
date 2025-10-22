@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "../layout/index.jsx";
 import Home from "../pages/home/index.jsx";
 import About from "../pages/about/index.jsx";
-import Login from "../pages/login/index.jsx";
+import Login from "../pages/Login/index.jsx";
 import Register from "../pages/register/index.jsx";
 import UserDashboard from "../pages/UserDash/index.jsx";
 import ProfilePage from "../pages/profile/index.jsx";
