@@ -3,7 +3,7 @@ import HeroSection from "../../components/heroSection";
 import PopularDestinations from "../../components/popDestinations";
 import TourPackages from "../../components/tripPackages";
 import Testimonials from "../../components/Testimonials";
-import Gallery from "../../components/gallery";
+import Gallery from "../../components/Gallery";
 import StayOptions from "../../components/stayOptions";
 
 const Home = () => {
