@@ -1,5 +1,5 @@
 import React from "react";
-import TourPackages from "../../components/tourPackages";
+import TourPackages from "../../components/tripPackages";
 
 const PackagesPage = () => {
   return (
@@ -11,7 +11,7 @@ const PackagesPage = () => {
           backgroundImage: "url('/assets/bg/minimarg-min.jpg')",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/40"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-black/70 to-black/40"></div>
 
         <div className="relative text-center text-white px-4 sm:px-6 animate-fadeInUp">
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
