@@ -1,20 +1,20 @@
 // src/routes/appRoutes.jsx
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "../layout";
-import Home from "../pages/home";
-import About from "../pages/about";
-import Login from "../pages/login";
-import Register from "../pages/register";
-import UserDashboard from "../pages/userdashbaord";
-import ProfilePage from "../pages/profile";
-import ScrollToTop from "../components/scrolltotop";
-import CustomizeTrip from "../pages/customizetrip";
-import AdminDashboard from "../pages/admindashboard";
-import Destination from "../pages/destination";
-import Packages from "../pages/packages"
-import AllReviews from "../pages/allreviews";
-import Contact from "../pages/contact";
+import Layout from "../layout/index.jsx";
+import Home from "../pages/home/index.jsx";
+import About from "../pages/about/index.jsx";
+import Login from "../pages/login/index.jsx";
+import Register from "../pages/register/index.jsx";
+import UserDashboard from "../pages/userdashbaord/index.jsx";
+import ProfilePage from "../pages/profile/index.jsx";
+import ScrollToTop from "../components/scrolltotop/index.jsx";
+import CustomizeTrip from "../pages/customizetrip/index.jsx";
+import AdminDashboard from "../pages/admindashboard/index.jsx";
+import Destination from "../pages/destination/index.jsx";
+import Packages from "../pages/packages/index.jsx"
+import AllReviews from "../pages/allreviews/index.jsx";
+import Contact from "../pages/contact/index.jsx";
 
 // Layout ke andar ScrollToTop wrap karenge
 const withScrollToTop = (element) => (
