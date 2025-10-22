@@ -27,7 +27,7 @@ const About = () => {
   return (
     <div className="bg-white text-gray-800">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-cyan-700 to-blue-500 text-white py-24 text-center">
+      <section className="relative bg-linear-to-r from-cyan-700 to-blue-500 text-white py-24 text-center">
         <div className="absolute inset-0 bg-black opacity-30"></div>
         <div className="relative z-10 max-w-4xl mx-auto px-6">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
@@ -133,7 +133,7 @@ const About = () => {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-16 bg-gradient-to-r from-cyan-600 to-blue-500 text-center text-white">
+      <section className="py-16 bg-linear-to-r from-cyan-600 to-blue-500 text-center text-white">
         <h2 className="text-3xl font-bold mb-4">
           Let’s Make Your Next Trip Unforgettable!
         </h2>
