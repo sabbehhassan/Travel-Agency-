@@ -8,7 +8,7 @@ import Register from "../pages/Register/index.jsx";
 import UserDashboard from "../pages/UserDash/index.jsx";
 import ProfilePage from "../pages/Profile/index.jsx";
 import ScrollToTop from "../components/ScrollToTop/index.jsx";
-import CustomizeTrip from "../pages/customizeTrip/index.jsx";
+import CustomizeTrip from "../pages/customTrip/index.jsx";
 import AdminDashboard from "../pages/adminDash/index.jsx";
 import Destination from "../pages/destination/index.jsx";
 import Packages from "../pages/packages/index.jsx";
