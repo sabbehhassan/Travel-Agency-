@@ -1,4 +1,3 @@
-// src/routes/appRoutes.jsx
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../layout/index.jsx";
@@ -6,17 +5,17 @@ import Home from "../pages/home/index.jsx";
 import About from "../pages/about/index.jsx";
 import Login from "../pages/login/index.jsx";
 import Register from "../pages/register/index.jsx";
-import UserDashboard from "../pages/userdashboard/index.jsx";
+import UserDashboard from "../pages/UserDash/index.jsx";
 import ProfilePage from "../pages/profile/index.jsx";
 import ScrollToTop from "../components/scrolltotop/index.jsx";
 import CustomizeTrip from "../pages/customizetrip/index.jsx";
-import AdminDashboard from "../pages/admindashboard/index.jsx";
+import AdminDashboard from "../pages/adminDash/index.jsx";
 import Destination from "../pages/destination/index.jsx";
-import Packages from "../pages/packages/index.jsx"
+import Packages from "../pages/packages/index.jsx";
 import AllReviews from "../pages/allreviews/index.jsx";
 import Contact from "../pages/contact/index.jsx";
 
-// Layout ke andar ScrollToTop wrap karenge
+// Wrap layout with ScrollToTop
 const withScrollToTop = (element) => (
   <>
     <ScrollToTop />
@@ -27,7 +26,7 @@ const withScrollToTop = (element) => (
 const router = createBrowserRouter([
   {
     path: "/",
-    element: withScrollToTop(<Layout />), // ✅ wrap layout
+    element: withScrollToTop(<Layout />),
     children: [
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
@@ -37,10 +36,10 @@ const router = createBrowserRouter([
       { path: "profile", element: <ProfilePage /> },
       { path: "customize-trip", element: <CustomizeTrip /> },
       { path: "admin-dashboard", element: <AdminDashboard /> },
-      {path: "destinations", element: <Destination />},
-      {path: "packages", element: <Packages/>},
-      {path: "reviews", element: <AllReviews />},
-      {path: "contact", element: <Contact />}
+      { path: "destinations", element: <Destination /> },
+      { path: "packages", element: <Packages /> },
+      { path: "reviews", element: <AllReviews /> },
+      { path: "contact", element: <Contact /> },
     ],
   },
 ]);
