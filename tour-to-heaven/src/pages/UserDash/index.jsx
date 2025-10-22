@@ -9,7 +9,7 @@ import {
   FaHotel,
   FaCalendarAlt,
 } from "react-icons/fa";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/authCon";
 import { useNavigate } from "react-router-dom";
 import ProfilePage from "../Profile";
 

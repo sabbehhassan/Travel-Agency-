@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/authCon";
 import { useNavigate } from "react-router-dom";
 
 const Testimonials = () => {

@@ -1,4 +1,4 @@
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/authCon";
 import { useNavigate } from "react-router-dom";
 
 const TourPackages = () => {
