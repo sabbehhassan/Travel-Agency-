@@ -1,5 +1,5 @@
 import React from "react";
-import PopularDestinations from "../../components/popularDestinations";
+import PopularDestinations from "../../components/popDestinations";
 import TourPackages from "../../components/tourPackages";
 
 const DestinationsPage = () => {

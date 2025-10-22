@@ -1,6 +1,6 @@
 import React from "react";
 import HeroSection from "../../components/heroSection";
-import PopularDestinations from "../../components/popularDestinations";
+import PopularDestinations from "../../components/popDestinations";
 import TourPackages from "../../components/tourPackages";
 import Testimonials from "../../components/testimonials";
 import Gallery from "../../components/gallery";
