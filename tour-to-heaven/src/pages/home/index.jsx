@@ -2,7 +2,7 @@ import React from "react";
 import HeroSection from "../../components/heroSection";
 import PopularDestinations from "../../components/popDestinations";
 import TourPackages from "../../components/tripPackages";
-import Testimonials from "../../components/testimonials";
+import Testimonials from "../../components/Testimonials";
 import Gallery from "../../components/gallery";
 import StayOptions from "../../components/stayOptions";
 
