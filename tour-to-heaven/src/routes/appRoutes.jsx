@@ -10,7 +10,7 @@ import ProfilePage from "../pages/Profile/index.jsx";
 import ScrollToTop from "../components/ScrollToTop/index.jsx";
 import CustomizeTrip from "../pages/customTrip/index.jsx";
 import AdminDashboard from "../pages/adminDash/index.jsx";
-import Destination from "../pages/destination/index.jsx";
+import Destination from "../pages/Destination/index.jsx";
 import Packages from "../pages/packages/index.jsx";
 import AllReviews from "../pages/allreviews/index.jsx";
 import Contact from "../pages/contact/index.jsx";
