@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
-import ProfilePage from "../profile";
+import ProfilePage from "../Profile";
 
 const UserDashboard = () => {
   const navigate = useNavigate();

@@ -6,7 +6,7 @@ import About from "../pages/About/index.jsx";
 import Login from "../pages/Login/index.jsx";
 import Register from "../pages/Register/index.jsx";
 import UserDashboard from "../pages/UserDash/index.jsx";
-import ProfilePage from "../pages/profile/index.jsx";
+import ProfilePage from "../pages/Profile/index.jsx";
 import ScrollToTop from "../components/scrolltotop/index.jsx";
 import CustomizeTrip from "../pages/customizetrip/index.jsx";
 import AdminDashboard from "../pages/adminDash/index.jsx";
