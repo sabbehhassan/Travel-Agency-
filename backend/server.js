@@ -13,44 +13,39 @@ dotenv.config();
 
 const app = express();
 
-// ✅ CORS setup (fully safe for localhost + Vercel)
+// ✅ CORS setup (safe for Vercel + Local)
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173",
+  process.env.FRONTEND_URL?.trim(), // your live site
+  "http://localhost:5173", // local dev
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests without an origin (like mobile/curl or preflight)
-      if (!origin) return callback(null, true);
-
-      // Check if origin is allowed
+      if (!origin) return callback(null, true); // Allow Postman, curl, etc.
       if (allowedOrigins.includes(origin)) {
-        callback(null, true);
+        return callback(null, true);
       } else {
         console.warn("❌ Blocked by CORS:", origin);
         return callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ allow all REST methods
-    allowedHeaders: ["Content-Type", "Authorization"], // ✅ for JWT/auth APIs
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// ✅ Handle preflight OPTIONS manually (important for Vercel)
 app.options("*", cors());
-
 app.use(express.json());
 
-// ✅ API Routes
+// ✅ Routes
 app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/contact", contactRoutes);
 
-// ✅ Root Route (for testing deployment)
+// ✅ Root
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "✅ Server is running successfully!",
@@ -61,5 +56,4 @@ app.get("/", (req, res) => {
   });
 });
 
-// ✅ Export for Vercel Serverless
 export default serverless(app);
