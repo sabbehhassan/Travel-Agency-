@@ -41,11 +41,15 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/contact", contactRoutes);
 
-// ✅ Default route
+// ✅ Root Route (for testing deployment)
 app.get("/", (req, res) => {
-  res.send("🚀 Travel Agency Backend Running on Vercel!");
+  res.status(200).json({
+    status: "✅ Server is running successfully!",
+    message: "🚀 Travel Agency Backend on Vercel",
+    environment: process.env.NODE_ENV || "production",
+    time: new Date().toISOString(),
+  });
 });
 
-// ✅ Export for Vercel serverless
+// ✅ Export for Vercel Serverless
 export default serverless(app);
-
