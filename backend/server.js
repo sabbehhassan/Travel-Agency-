@@ -9,20 +9,27 @@ import testimonialRoutes from "./routes/testimonialRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 
 dotenv.config();
-
 const app = express();
 
-// ✅ CORS setup (fully safe for Vercel + Localhost)
+// ✅ Allowed Origins
 const allowedOrigins = [
-  process.env.FRONTEND_URL?.trim(), // your live site from env
+  process.env.FRONTEND_URL?.trim(), // your live frontend URL (from .env)
   "http://localhost:5173", // local dev
 ];
 
+// ✅ CORS Configuration (safe + flexible)
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow tools like Postman
-      if (allowedOrigins.includes(origin)) {
+      // Allow requests without an origin (Postman, curl, etc.)
+      if (!origin) return callback(null, true);
+
+      // Match origin flexibly (handles trailing slashes or subpaths)
+      const isAllowed = allowedOrigins.some((allowed) =>
+        origin.startsWith(allowed)
+      );
+
+      if (isAllowed) {
         callback(null, true);
       } else {
         console.warn("❌ Blocked by CORS:", origin);
@@ -37,13 +44,13 @@ app.use(
 
 app.use(express.json());
 
-// ✅ Routes
+// ✅ API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/contact", contactRoutes);
 
-// ✅ Root test route
+// ✅ Root route (for health check)
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "✅ Server is running successfully!",
@@ -54,8 +61,9 @@ app.get("/", (req, res) => {
   });
 });
 
-// ✅ Start server (works on both local + vercel)
+// ✅ Server Listener (for local + Vercel)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+  console.log("✅ Allowed Origins:", allowedOrigins);
 });
