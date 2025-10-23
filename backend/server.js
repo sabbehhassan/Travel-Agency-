@@ -2,7 +2,6 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import serverless from "serverless-http";
 
 import userRoutes from "./routes/userRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
@@ -13,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-// ✅ Dynamic CORS setup
+// ✅ CORS setup
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
@@ -35,13 +34,13 @@ app.use(
 
 app.use(express.json());
 
-// ✅ API Routes
+// ✅ Routes
 app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/contact", contactRoutes);
 
-// ✅ Root Route (for testing deployment)
+// ✅ Root route (testing)
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "✅ Server is running successfully!",
@@ -51,5 +50,13 @@ app.get("/", (req, res) => {
   });
 });
 
-// ✅ Export for Vercel Serverless
-export default serverless(app);
+// ✅ Start server (for local + Vercel auto export)
+const PORT = process.env.PORT || 5000;
+
+// Only listen locally, Vercel will handle in production
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
+
+// ✅ Export app for Vercel
+export default app;
