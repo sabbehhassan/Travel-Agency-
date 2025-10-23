@@ -2,6 +2,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import serverless from "serverless-http";
 
 import userRoutes from "./routes/userRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
@@ -12,7 +13,7 @@ dotenv.config();
 
 const app = express();
 
-// ✅ CORS setup
+// ✅ CORS setup (fully safe for localhost + Vercel)
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173",
@@ -20,43 +21,45 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: function (origin, callback) {
+    origin: (origin, callback) => {
+      // Allow requests without an origin (like mobile/curl or preflight)
       if (!origin) return callback(null, true);
+
+      // Check if origin is allowed
       if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        console.warn("❌ Blocked by CORS:", origin);
+        return callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ allow all REST methods
+    allowedHeaders: ["Content-Type", "Authorization"], // ✅ for JWT/auth APIs
   })
 );
 
+// ✅ Handle preflight OPTIONS manually (important for Vercel)
+app.options("*", cors());
+
 app.use(express.json());
 
-// ✅ Routes
+// ✅ API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/contact", contactRoutes);
 
-// ✅ Root route (testing)
+// ✅ Root Route (for testing deployment)
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "✅ Server is running successfully!",
     message: "🚀 Travel Agency Backend on Vercel",
+    frontend_url: process.env.FRONTEND_URL,
     environment: process.env.NODE_ENV || "production",
     time: new Date().toISOString(),
   });
 });
 
-// ✅ Start server (for local + Vercel auto export)
-const PORT = process.env.PORT || 5000;
-
-// Only listen locally, Vercel will handle in production
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-}
-
-// ✅ Export app for Vercel
-export default app;
+// ✅ Export for Vercel Serverless
+export default serverless(app);
