@@ -46,6 +46,6 @@ app.get("/", (req, res) => {
   res.send("🚀 Travel Agency Backend Running on Vercel!");
 });
 
-// ❌ REMOVE app.listen()
-// ✅ ADD THIS:
-export const handler = serverless(app);
+// ✅ Export for Vercel serverless
+export default serverless(app);
+
