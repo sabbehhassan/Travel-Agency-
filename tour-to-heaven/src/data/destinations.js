@@ -246,94 +246,95 @@ Before the modern era, local Shina-speaking communities cultivated subsistence a
 Despite modern access, Astore retains a quieter, less commercialised character compared to its neighbouring hotspots. From ancient pine forests in Rama to hidden passes in Minimarg, the valley invites travellers to slow down and immerse themselves in nature, culture and high-altitude serenity. `,
 
   },
-  {
+   {
     id: 4,
-    name: "Khunjerab Top (China Border)",
-    image: "/images/khunjerab-top.jpg",
+    name: "Ghizer Valley",
+    image: "/assets/ghizer/ghizer.jpg",
     shortDescription:
-      "Khunjerab Top — the world’s highest paved international border crossing, linking Pakistan’s Hunza Valley with China’s Xinjiang region through the spectacular Karakoram Highway.",
-    location: "Khunjerab Pass, Hunza District, Gilgit-Baltistan, Pakistan",
-    mapLink: "https://goo.gl/maps/exampleKhunjerabTop", // replace with actual Google Maps link
+      "Ghizer Valley — the westernmost gem of Gilgit-Baltistan, Pakistan, where lush meadows, turquoise lakes and age-old cultures meet high mountain peaks.",
+    location: "Gupis-Yasin / Ghizer District, Gilgit-Baltistan, Pakistan",
+    mapLink: "https://www.google.com/maps/search/ghizer+valley+address/@36.3051655,73.5562134,10z?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D",  // replace with actual map link
 
     highlights: [
       {
-        title: "Khunjerab National Park",
+        title: "Phander Lake & Meadows",
         description:
-          "A high-altitude park home to snow leopards, Himalayan ibex, Marco Polo sheep, and yaks grazing along the rugged terrain — offering surreal Himalayan scenery and rare wildlife sightings. ([pakistantravelguide.pk](https://www.pakistantravelguide.pk/khunjerab-national-park/?utm_source=chatgpt.com))",
-        image: "/images/khunjerab-national-park.jpg",
+          "A peaceful alpine lake with emerald green waters and surrounding wildflower meadows in the heart of Ghizer — perfect for photography and nature walks. :contentReference[oaicite:1]{index=1}",
+        image: "/assets/ghizer/Phander.jpg",
       },
       {
-        title: "Pak-China Friendship Gate",
+        title: "Shandur Pass – World’s Highest Polo Ground",
         description:
-          "The iconic white-stone gate marking the official border between Pakistan and China — a powerful symbol of the Pak-China friendship and the highest paved border gate in the world. ([china.org.cn](https://www.china.org.cn/travel/2015-07/10/content_36038314.htm?utm_source=chatgpt.com))",
-        image: "/images/pak-china-gate.jpg",
+          "A high-altitude plateau linking Ghizer and Chitral, famed for the annual polo festival held at some 12,500 ft above sea level. :contentReference[oaicite:2]{index=2}",
+        image: "/assets/ghizer/shandur.jpg",
       },
       {
-        title: "Karakoram Highway Journey",
+        title: "Khalti Lake & Gupis Valley",
         description:
-          "The legendary KKH takes you through tunnels, glaciers, and valleys — often called the ‘Eighth Wonder of the World’ for its engineering at extreme altitudes. ([dawn.com](https://www.dawn.com/news/1409659?utm_source=chatgpt.com))",
-        image: "/images/karakoram-highway.jpg",
+          "Crystal clear lake near Gupis where trout fishing, ice-skating in winter and scenic calm waters make it a standout attraction. :contentReference[oaicite:3]{index=3}",
+        image: "/assets/ghizer/Khalti.jpg",
       },
       {
-        title: "Sust Border Town",
+        title: "Yasin & Ishkoman Valleys",
         description:
-          "A small border town near Khunjerab used for customs and immigration — with local cafés, souvenir shops, and a last glimpse of Pakistani culture before entering China.",
-        image: "/images/sust-town.jpg",
+          "Remote valleys of Ghizer rich in heritage, mountain passes, and traditional Shina/Khowar culture, offering trekking and wild landscapes. :contentReference[oaicite:4]{index=4}",
+        image: "/assets/ghizer/ishkoman.jpg",
       },
     ],
 
     travelInfo: {
       howToGetThere:
-        "From Hunza (Karimabad), drive north along the Karakoram Highway for about 3–4 hours. The road climbs past Passu Cones and Sost to reach Khunjerab Top at 4,693 m (15,397 ft). The pass is usually accessible from May to November. ([pakistantravelblog.com](https://pakistantravelblog.com/khunjerab-pass/?utm_source=chatgpt.com))",
+        "Ghizer Valley is accessible by road from Gilgit via the Gilgit-Chitral highway, passing Gupis and onward to the valley’s many sub-valleys. The journey itself offers dramatic scenery of rivers, forests and high peaks. :contentReference[oaicite:5]{index=5}",
       bestTime: [
         {
-          season: "Late Spring (May–June)",
+          season: "Spring (April–June)",
           detail:
-            "Pleasant temperatures and clear skies make it ideal for photography. Snow begins to melt and the road reopens after winter closures.",
-          image: "/images/spring-khunjerab.jpg",
+            "Green meadows come alive, rivers swell with snowmelt, and the weather is mild — good for photography and nature walks.",
+          image: "/assets/ghizer/spring.jpeg",
         },
         {
           season: "Summer (July–August)",
           detail:
-            "Mild daytime weather, open border, and lush green valleys — perfect for family trips and sightseeing.",
-          image: "/images/summer-khunjerab.jpg",
+            "Warm but not hot, perfect for trekking, valley exploration and exploring remote villages in Ghizer.",
+          image: "/assets/ghizer/summer.jpg",
         },
         {
           season: "Autumn (September–October)",
           detail:
-            "Golden hues across the mountains and minimal traffic — a great time for peaceful exploration and capturing vibrant colors.",
-          image: "/images/autumn-khunjerab.jpg",
+            "Foliage turns gold, skies are clear, fewer tourists and the valley atmosphere is calm and serene.",
+          image: "/assets/ghizer/autumn.jpg",
         },
         {
-          season: "Winter (November–April)",
+          season: "Winter (November–March)",
           detail:
-            "Heavy snow closes the pass; however, the surrounding valleys offer breathtaking snow views for adventurers ready to brave the cold.",
-          image: "/images/winter-khunjerab.jpg",
+            "Snow blankets the higher reaches, some roads may be closed — great for experienced travellers seeking solitude and snowy wilderness.",
+          image: "/assets/ghizer/winter.jpg",
         },
       ],
     },
 
     accommodations: [
-      { type: "Mid-range", list: ["Sost Border Hotel", "Passu Ambassador Inn"] },
-      { type: "Budget", list: ["Local Guest Houses in Sost", "Homestays in Passu"] },
-      { type: "Luxury (nearby)", list: ["Hunza Serena Inn", "Hard Rock Hunza"] },
+      { type: "Mid-range", list: ["Gahkuch Guesthouse", "Phander Lake View Lodge"] },
+      { type: "Budget", list: ["Homestays in Gupis", "Camping sites in Ishkoman"] },
+      { type: "Luxury (select)", list: ["Boutique lodge near Shandur Pass"] },
     ],
 
     cuisine: [
-      "Local yak meat dishes",
-      "Hunza walnut cake and herbal teas",
-      "Apricot soup (regional specialty)",
-      "Traditional naan with mountain honey",
+      "Local trout fish (fresh-caught in alpine streams)",
+      "Apricot jam & walnut bread",
+      "Butter chai with yak milk",
+      "Wild herb tea from Ghizer forests",
     ],
 
     history: `
-Khunjerab Top (also called Khunjerab Pass) sits at an elevation of approximately 4,693 m (15,397 ft), marking the highest paved border crossing in the world and one of the most scenic gateways between South and Central Asia. ([wikipedia.org](https://en.wikipedia.org/wiki/Khunjerab_Pass?utm_source=chatgpt.com))
+Ghizer Valley has an ancient and diverse heritage that spans mountain kingdoms, trade routes and cultural migration. Historically referred to as “Koh-i-Ghizer” or “Valley of Refugees” (from the Khowar term “Gherz”), it served as a refuge for tribes migrating from Chitral and beyond. :contentReference[oaicite:6]{index=6}
 
-Historically, this route served as part of the ancient Silk Road network linking traders from China to the Indian subcontinent. The name “Khunjerab” originates from Wakhi language — *Khun* (blood) and *Jerav* (stream) — referencing ancient conflicts fought near this high pass. ([thenews.com.pk](https://www.thenews.com.pk/latest/1083427-khunjerab-pass-the-highest-paved-border-crossing-in-the-world?utm_source=chatgpt.com))
+Under the rule of local Rajas, the area was part of trade networks linking the Hindu Kush, Karakoram and Pamir regions, with passes like Darkot and Qurumbar facilitating movement of people and goods. :contentReference[oaicite:7]{index=7}
 
-In modern times, it became an engineering marvel after the construction of the **Karakoram Highway (KKH)** in the 1970s, built jointly by Pakistan and China. Today, the pass serves as a major part of the **China–Pakistan Economic Corridor (CPEC)** and a symbol of enduring friendship between the two nations.
+In modern times, Ghizer remains a quieter and less-visited counterpart to its neighbouring tourist hubs, offering rich culture (Shina, Khowar and Burushaski languages), warm Ismaili and Sunni communities, and incredible natural diversity — from low riverside orchards to high altitude glaciers. :contentReference[oaicite:8]{index=8}
 
-Travelers experience a truly unique moment here — where the Pakistani landscape of rocky valleys and snowfields meets the vast highlands of China’s Xinjiang province. The thin mountain air, breathtaking altitude, and striking scenery make Khunjerab Top one of Pakistan’s most unforgettable destinations.`,
+Today, Ghizer Valley is increasingly recognised for its potential in sustainable tourism, trekking, fishing and cultural exchange — a true “land of lakes and peaks” waiting to be discovered.
+    `,
   },
   {
     id: 5,

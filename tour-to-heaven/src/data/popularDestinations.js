@@ -22,8 +22,8 @@ const popularDestinations = [
   },
   {
     id: 4,
-    name: "Khunjerab Pass",
-    image: "/assets/Destinations/KhunjrabPass-min.jpg",
+    name: "Ghizer",
+    image: "/assets/Destinations/Ghizerr.jpg",
     description:
       "High-altitude pass connecting Pakistan to China via the Karakoram Highway.",
   },
