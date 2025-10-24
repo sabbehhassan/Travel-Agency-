@@ -153,7 +153,7 @@ const DestinationDetails = () => {
               key={i}
               src={img}
               alt="Gallery"
-              className="w-full h-48 object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
+              className="w-full h-65 object-cover rounded-xl shadow-md hover:scale-105 transition-transform duration-300"
             />
           ))}
         </div>
