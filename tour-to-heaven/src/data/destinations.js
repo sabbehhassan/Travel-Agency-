@@ -93,7 +93,7 @@ const destinations = [
   {
     id: 2,
     name: "Skardu Valley",
-    image: "/images/skardu-valley.jpg",
+    image: "/assets/skardu/skardu.jpg",
     shortDescription:
       "Skardu Valley — the gateway to the mighty Karakoram and home to lakes, peaks, and rugged landscapes unlike anywhere else in Pakistan.",
     location: "Gilgit-Baltistan, Pakistan",
@@ -104,25 +104,25 @@ const destinations = [
         title: "Kharpocho (Skardu) Fort",
         description:
           "A 16th-century hill-fort that overlooks Skardu town and the confluence of the Indus and Shigar Rivers. Built by King Ali Sher Khan Anchan, it remains a symbol of the region’s royal past. :contentReference[oaicite:1]{index=1}",
-        image: "/images/kharpocho-fort.jpg",
+        image: "/assets/skardu/kharpocho.jpg",
       },
       {
         title: "Shangrila Resort & Lower Kachura Lake",
         description:
           "A scenic lakeside resort built around the ‘heart-shaped’ Lower Kachura Lake, surrounded by orchards and mountains — often called ‘Heaven on Earth’. :contentReference[oaicite:2]{index=2}",
-        image: "/images/shangrila-lake.jpg",
+        image: "/assets/skardu/Shangrila.jpeg",
       },
       {
         title: "Deosai National Park (Land of Giants)",
         description:
           "At over 4,000 m elevation, this vast high-altitude plateau is a wonder of wildflowers, wildlife (including Himalayan brown bears) and sweeping mountain views. :contentReference[oaicite:3]{index=3}",
-        image: "/images/deosai-plateau.jpg",
+        image: "/assets/skardu/deosai.jpg",
       },
       {
         title: "Manthal Buddha Rock",
         description:
           "An ancient rock carving dating back to the 8th century, reflecting Skardu’s Buddhist heritage before the arrival of Islam. :contentReference[oaicite:4]{index=4}",
-        image: "/images/manthal-buddha-rock.jpg",
+        image: "/assets/skardu/manthal.jpeg",
       },
     ],
 
@@ -134,25 +134,25 @@ const destinations = [
           season: "Spring (March–May)",
           detail:
             "Snow begins to melt, cherry and apricot orchards bloom, and the weather is fresh — perfect for exploring lakes and valleys.",
-          image: "/images/spring-skardu.jpg",
+          image: "/assets/skardu/spring.jpeg",
         },
         {
           season: "Summer (June–August)",
           detail:
             "Ideal time for trekking, visiting Deosai, lakeside adventures and cooler mountain evenings.",
-          image: "/images/summer-skardu.jpg",
+          image: "/assets/skardu/summer.jpeg",
         },
         {
           season: "Autumn (September–October)",
           detail:
             "Golden foliage, clear skies and crisp air make this season a photographer’s favourite in Skardu.",
-          image: "/images/autumn-skardu.jpg",
+          image: "/assets/skardu/autumn.avif",
         },
         {
           season: "Winter (November–February)",
           detail:
             "Snow blankets the valley, roads may be tougher but the landscape turns into a white wonderland for the hardy traveller.",
-          image: "/images/winter-skardu.jpg",
+          image: "/assets/skardu/winter.jpeg",
         },
       ],
     },
@@ -180,92 +180,71 @@ const destinations = [
   },
   {
     id: 3,
-    name: "Fairy Meadows",
-    image: "/images/fairy-meadows.jpg",
+    name: "Astore Valley",
+    image: "/assets/astore/Astore.jpg",
     shortDescription:
-      "Fairy Meadows — one of the most beautiful alpine meadows in the world, tucked beneath the majestic north face of Nanga Parbat in Gilgit-Baltistan, Pakistan.",
-    location: "Diamer District, Gilgit-Baltistan, Pakistan",
-    mapLink: "https://goo.gl/maps/exampleFairyMeadows",  // update with actual Google Map link
+      "Astore Valley — the lush, serene and lesser-known gem of Gilgit-Baltistan, Pakistan, nestled between mighty peaks, pristine lakes and ancient villages.",
+    location: "Astore District, Gilgit-Baltistan, Pakistan",
+    mapLink: "https://www.google.com/maps/place/Astore+Morr+(Chowk)+KKH/@35.5695126,74.5079054,12.21z/data=!4m10!1m2!2m1!1sastore!3m6!1s0x38e68b7686e44027:0x6dc4e96cfd8715f0!8m2!3d35.568647!4d74.6249369!15sCgZhc3RvcmWSARNoaXN0b3JpY2FsX2xhbmRtYXJr4AEA!16s%2Fg%2F11hz98sh2_?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D",  // update with actual link
 
     highlights: [
       {
-        title: "Nanga Parbat View Point",
+        title: "Rama Meadows & Rama Lake",
         description:
-          "An iconic viewpoint offering a breathtaking sight of Nanga Parbat’s massive north face, often described as one of the most photogenic mountain scenes in the world. :contentReference[oaicite:1]{index=1}",
-        image: "/images/nanga-parbat-view.jpg",
+          "A breathtaking alpine meadow and lake set beneath the north face of Nanga Parbat. Pine forests, green pastures and a calm lake make this one of the valley’s signature spots. :contentReference[oaicite:1]{index=1}",
+        image: "/assets/astore/rama.jpg",
       },
       {
-        title: "Reflection Lake",
+        title: "Minimarg Valley",
         description:
-          "A mirror-like alpine lake near Fairy Meadows that perfectly reflects Nanga Parbat on calm mornings — a must‐visit for photographers. :contentReference[oaicite:2]{index=2}",
-        image: "/images/reflection-lake-fairy.jpg",
+          "Remote and pristine, Minimarg lies in the eastern side of Astore and features wild meadows, dense forests, and the seldom-visited route through Burzil Pass. :contentReference[oaicite:2]{index=2}",
+        image: "/assets/astore/minimarg.jpg",
       },
       {
-        title: "Beyal Camp & Glacier Trails",
+        title: "Deosai Plateau Access via Astore",
         description:
-          "Beyond the meadows lies Beyal Camp and glacier-fed trails that take you into the heart of the mountains — ideal for hiking and wild tranquillity. :contentReference[oaicite:3]{index=3}",
-        image: "/images/beyal-camp-fairy.jpg",
+          "Astore is one of the main gateways to the vast high-altitude Deosai Plains — ‘Land of the Giants’ — offering wildflowers, large wildlife and open skies. :contentReference[oaicite:4]{index=4}",
+        image: "/assets/astore/deosai.jpg",
       },
       {
-        title: "Jeep Track to Tattu Village",
+        title: "Gorikot & Bubin Villages",
         description:
-          "The legendary jeep track from Raikot Bridge to Tattu Village is narrow, steep and considered one of the world’s most thrilling mountain roads. :contentReference[oaicite:4]{index=4}",
-        image: "/images/jeep-track-fairy.jpg",
+          "Traditional Shina-language villages tucked in the valley, offering cultural authenticity, trout-filled rivers and genuine local hospitality. :contentReference[oaicite:5]{index=5}",
+        image: "/assets/astore/gorikot.jpg",
       },
     ],
 
     travelInfo: {
       howToGetThere:
-        "Start from Raikot Bridge on the Karakoram Highway. From there you take a 4×4 jeep ride (approx 1.5-2 hours) to Tattu Village, followed by a moderate 2-3 hour hike to the meadows. :contentReference[oaicite:5]{index=5}",
+        "From Gilgit drive east along the Astore road (approx. 4-5 hours) which branches from the Karakoram Highway. Roads may be rough and high-altitude. :contentReference[oaicite:6]{index=6}",
       bestTime: [
-        {
-          season: "Spring (April–May)",
-          detail:
-            "Lush green meadows, wildflowers blossoming and clear views of the mountains — excellent for nature walks.",
-          image: "/images/spring-fairy-meadows.jpg",
-        },
-        {
-          season: "Summer (June–August)",
-          detail:
-            "Peak trekking season, accessible trails, comfortable weather and longer daylight hours for exploring.",
-          image: "/images/summer-fairy-meadows.jpg",
-        },
-        {
-          season: "Autumn (September–October)",
-          detail:
-            "Golden light, fewer crowds, crisp air and spectacular sunsets make it a photographer’s paradise.",
-          image: "/images/autumn-fairy-meadows.jpg",
-        },
-        {
-          season: "Winter (November–March)",
-          detail:
-            "Snow-covered plateau, dramatic landscapes, but access is difficult and many facilities are closed — for experienced travellers only.",
-          image: "/images/winter-fairy-meadows.jpg",
-        },
+        { season: "Spring (April–May)", detail: "Fresh green meadows, snow-capped peaks melting and wildflowers emerging.", image: "/assets/astore/Spring.jpeg" },
+        { season: "Summer (June–August)", detail: "Peak season for trekking, lakes and alpine vistas.", image: "/assets/astore/summer.jpeg" },
+        { season: "Autumn (Sept–October)", detail: "Crisp air, golden foliage and fewer tourists make it a photographer’s dream.", image: "/assets/astore/autumn.jpeg" },
+        { season: "Winter (Nov–March)", detail: "Heavy snow blankets the valley, roads may be closed — for experienced travellers only.", image: "/assets/astore/winter.jpeg" },
       ],
     },
 
     accommodations: [
-      { type: "Wooden Huts & Lodges", list: ["Fairy Meadows Cottages", "German Viewpoint Lodge"] },
-      { type: "Mid-range", list: ["Tattu Village Guesthouses", "Beyal Camp Camping"] },
-      { type: "Budget", list: ["Local homestays", "Camping sites"] },
+      { type: "Mid-range", list: ["PTDC Rama Lake Motel", "Astore Continental Hotel"] },
+      { type: "Budget", list: ["Guesthouses in Gorikot", "Homestays in Bubin"] },
+      { type: "Camping & Trekking", list: ["Rama Meadows campsites", "Minimarg remote tents"] },
     ],
 
     cuisine: [
-      "Mountain apricot jam & bread",
-      "Grilled trout (local lakeside catch)",
-      "Butter chai & wild herb tea",
-      "Traditional Shina bread (chapati) with lentils"
+      "Trout fish from mountain streams",
+      "Apricot jam & local nuts",
+      "Butter chai with yak milk",
+      "Buckwheat bread (popular in high altitude valleys)"
     ],
 
     history:
-      `Fairy Meadows, locally known as “Joot” by the Shina-speaking community, lies at an altitude of around 3,300 m (10,800 ft), directly facing the north face of Nanga Parbat. :contentReference[oaicite:6]{index=6}
+      `Astore Valley has served as a corridor and highland refuge for centuries. Nestled between the great ranges of the Himalayas and the Karakoram, it was historically part of trade and movement routes linking the north with Kashmir and beyond. :contentReference[oaicite:7]{index=7}  
       
-Historically, it served as a base for mountaineers attempting the “Killer Mountain” (Nanga Parbat) and remained relatively inaccessible until a narrow jeep track and hiking trail opened to facilitate tourism. :contentReference[oaicite:7]{index=7}
+Before the modern era, local Shina-speaking communities cultivated subsistence agriculture, livestock and traditional crafts in this mountainous terrain. With the opening of roads and the arrival of tourism in recent decades, the valley has begun to share its remote beauty with the world.  
       
-Over time the meadows transformed from a remote alpine pasture into a sought-after destination for nature-lovers, trekkers and photographers alike. The surrounding forests, meadows and glacial streams reflect both the local subsistence lifestyle of the Raikot valley communities and their resilience in harsh mountain environments.
-      
-Today, Fairy Meadows is celebrated not only for its dramatic views and adventurous access but also as a symbol of mountain-community driven tourism in the heart of Pakistan’s northern wilderness.`,
+Despite modern access, Astore retains a quieter, less commercialised character compared to its neighbouring hotspots. From ancient pine forests in Rama to hidden passes in Minimarg, the valley invites travellers to slow down and immerse themselves in nature, culture and high-altitude serenity. `,
+
   },
   {
     id: 4,

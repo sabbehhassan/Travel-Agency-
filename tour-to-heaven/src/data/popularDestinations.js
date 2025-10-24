@@ -15,10 +15,10 @@ const popularDestinations = [
   },
   {
     id: 3,
-    name: "Fairy Meadows",
-    image: "/assets/Destinations/FairyMedows-min.jpg",
+    name: "Astore Valley",
+    image: "/assets/Destinations/astore.jpg",
     description:
-      "Stunning green plains with breathtaking views of Nanga Parbat.",
+      "Stunning green plains and lakes with breathtaking views of Astore Valley.",
   },
   {
     id: 4,
