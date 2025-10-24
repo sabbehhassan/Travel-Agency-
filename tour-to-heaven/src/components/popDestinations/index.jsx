@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import popularDestinations from "../../data/popularDestinations";
 
 const PopularDestinations = () => {
@@ -11,8 +12,9 @@ const PopularDestinations = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {popularDestinations.map((destination) => (
-            <div
+            <Link
               key={destination.id}
+              to={`/destination/${destination.id}`}
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 group"
             >
               <img
@@ -28,7 +30,7 @@ const PopularDestinations = () => {
                   {destination.description}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -14,6 +14,7 @@ import Destination from "../pages/Destination/index.jsx";
 import Packages from "../pages/Packages/index.jsx";
 import AllReviews from "../pages/Reviews/index.jsx";
 import Contact from "../pages/Contact/index.jsx";
+import DestinationDetails from "../pages/DestinationDetails/index.jsx";
 
 // Wrap layout with ScrollToTop
 const withScrollToTop = (element) => (
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       { path: "packages", element: <Packages /> },
       { path: "reviews", element: <AllReviews /> },
       { path: "contact", element: <Contact /> },
+      { path: "destination/:id", element: <DestinationDetails/>}
     ],
   },
 ]);
