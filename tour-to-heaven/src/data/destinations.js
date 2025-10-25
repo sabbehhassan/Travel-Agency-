@@ -338,91 +338,90 @@ Today, Ghizer Valley is increasingly recognised for its potential in sustainable
   },
   {
     id: 5,
-    name: "Attabad Lake",
-    image: "/images/attabad-lake-main.jpg",
+    name: "Nagar District",
+    image: "/assets/nagar/n.jpg",
     shortDescription:
-      "Attabad Lake — the breathtaking turquoise-blue lake of Hunza, born from a natural disaster and now one of Pakistan’s most stunning and must-visit tourist attractions.",
-    location: "Gojal Valley, Hunza District, Gilgit-Baltistan, Pakistan",
-    mapLink: "https://goo.gl/maps/GKg6uV4cm2ytnHh48",
+      "Nagar District — a majestic high-mountain region of Gilgit-Baltistan, Pakistan, known for towering peaks, hidden meadows, gemstone mines and rich cultural heritage.",
+    location: "Gilgit-Baltistan, Pakistan",
+    mapLink: "https://goo.gl/maps/exampleNagar",  // update with actual link
 
     highlights: [
       {
-        title: "Boating & Jet Skiing",
+        title: "Rakaposhi Peak",
         description:
-          "Attabad Lake is famous for thrilling boating and jet-ski adventures amidst crystal-clear waters surrounded by towering mountains. The experience offers a perfect blend of peace and adrenaline.",
-        image: "/images/attabad-boating.jpg",
+          "Soaring at 7,788 m, Rakaposhi dominates the skyline of Nagar Valley and is considered one of the most beautiful mountains in the world. :contentReference[oaicite:1]{index=1}",
+        image: "/assets/nagar/spring.jpg",
       },
       {
-        title: "Luxus Hunza Resort",
+        title: "Hoper & Hisper Valleys",
         description:
-          "Perched on the lake’s edge, Luxus Hunza offers luxury accommodation with panoramic views of the turquoise waters — ideal for honeymooners and tourists seeking comfort with nature.",
-        image: "/images/luxus-hunza.jpg",
+          "These remote valleys in upper Nagar offer glaciers, alpine meadows and quiet trekking routes — far from the crowds. :contentReference[oaicite:2]{index=2}",
+        image: "/images/hoper-valley.jpg",
       },
       {
-        title: "Gulmit Village",
+        title: "Gemstone Mines of Sumayar & Minapin",
         description:
-          "Located near Attabad, Gulmit is a historic Wakhi village known for its traditional houses, local handicrafts, and warm hospitality.",
-        image: "/images/gulmit-village.jpg",
+          "Nagar is famed for its precious stones — aquamarine, topaz and others mined in Sumayar & Minapin valleys. :contentReference[oaicite:3]{index=3}",
+        image: "/images/sumayar-gemstone-mine.jpg",
       },
       {
-        title: "Passu Cones & Hussaini Suspension Bridge",
+        title: "Kacheli Lake & Meadows",
         description:
-          "Just a short drive away, these iconic spots are a must-visit — the sharp peaks of Passu Cones and the thrilling Hussaini Bridge make the journey unforgettable.",
-        image: "/images/hussaini-bridge.jpg",
+          "A high-altitude lake set within Miacher valley of Nagar District — tranquil, scenic and off-beat. :contentReference[oaicite:4]{index=4}",
+        image: "/images/kacheli-lake.jpg",
       },
     ],
 
     travelInfo: {
       howToGetThere:
-        "Attabad Lake is located approximately 20 km from Karimabad, Hunza, and can be reached via the Karakoram Highway (KKH). It’s about a 2.5-hour drive from Gilgit City. Private vehicles, jeeps, and local transport are available from Hunza and Gilgit.",
+        "Nagar can be reached via the Karakoram Highway from Gilgit. The district spans from lower valleys along the KKH to the remote upper valleys such as Hisper and Hoper. :contentReference[oaicite:5]{index=5}",
       bestTime: [
         {
-          season: "Spring (March–May)",
+          season: "Spring (April–May)",
           detail:
-            "Cherry blossom season with mild weather and fresh blue hues in the lake. Perfect for boating and light trekking.",
-          image: "/images/attabad-spring.jpg",
+            "Snow recedes, orchards bloom, and meadows open up — a wonderful time to visit lower Nagar and enjoy fruit blossoms.",
+          image: "/assets/nagar/spring.jpg",
         },
         {
           season: "Summer (June–August)",
           detail:
-            "Peak tourist season with warm temperatures, full water levels, and vibrant views. Ideal for water sports and outdoor photography.",
-          image: "/images/attabad-summer.jpg",
+            "Clear skies, full access to high-altitude valleys and glaciers — optimal for trekking and mountain photography.",
+          image: "/assets/nagar/summm.jpg",
         },
         {
           season: "Autumn (September–October)",
           detail:
-            "Golden trees and clear skies make the turquoise lake shine even more beautifully. Fewer crowds and cooler evenings.",
-          image: "/images/attabad-autumn.jpg",
+            "The valley changes colors, fewer tourists and crisp air make it ideal for a peaceful escape.",
+          image: "/assets/nagar/aut.jpeg",
         },
         {
-          season: "Winter (November–February)",
+          season: "Winter (November–March)",
           detail:
-            "The lake partially freezes during harsh winters, turning into a surreal icy wonderland — a hidden gem for adventurous travelers.",
-          image: "/images/attabad-winter.jpg",
+            "Heavy snow blankets many of the higher passes and tracks; only lower regions may be accessible — a time for solitude and winter landscapes.",
+          image: "/assets/nagar/winter.jpeg",
         },
       ],
     },
 
     accommodations: [
-      { type: "Luxury", list: ["Luxus Hunza", "Hard Rock Hunza Resort"] },
-      { type: "Mid-range", list: ["Hunza Embassy Hotel", "Hunza Elites"] },
-      { type: "Budget", list: ["Local guesthouses in Gulmit", "Homestays near Attabad"] },
+      { type: "Mid-range", list: ["Nagar Khas Guesthouse", "Bar Valley View Lodge"] },
+      { type: "Budget", list: ["Homestays in Minapin", "Guesthouses in Chaprote"] },
+      { type: "Adventure Camping", list: ["Hoper Valley campsites", "Hisper glacier base-camp tents"] },
     ],
 
     cuisine: [
-      "Chapshuro (Hunza meat pie)",
-      "Apricot soup",
-      "Yak karahi",
-      "Traditional Hunza bread with honey",
+      "Apricot jam and local fruits of Nagar orchards",
+      "Yak meat stew (traditional northern fare)",
+      "Buckwheat bread (alpine high-valley staple)",
+      "Butter tea with local mountain herbs",
     ],
 
     history: `
-Attabad Lake was formed in January 2010 after a massive landslide in Attabad village blocked the Hunza River. The disaster tragically claimed 20 lives and submerged several villages, displacing over 6,000 people. ([wikipedia.org](https://en.wikipedia.org/wiki/Attabad_Lake?utm_source=chatgpt.com))
-
-Initially viewed as a tragedy, the lake soon became a symbol of resilience and rebirth for the people of Hunza. Over the years, its mesmerizing blue waters attracted tourists from across Pakistan and the world. The Karakoram Highway, which was once blocked, was rebuilt through a series of tunnels and bridges — now famously known as the **Attabad Tunnels**, a remarkable engineering achievement under the China–Pakistan Economic Corridor (CPEC).
-
-Today, Attabad Lake is one of the most photographed locations in Pakistan. Its surreal blue color, created by glacial sediment, shifts in tone with sunlight and seasons. Visitors experience serenity, adventure, and a powerful story of nature’s transformation — turning tragedy into breathtaking beauty.`,
+Nagar has a long and layered history. Originally a princely state for over a millennium, it maintained its own Mir (ruler) and autonomous status until 1974 when it was integrated into Pakistan’s Northern Areas. :contentReference[oaicite:6]{index=6}  
+The region was also part of old mountain trade routes and is rich in gem-mining traditions. Ecologically, its terrain spans from fertile orchards to permanent snowfields and glaciers — less than 1 % of the land is used for agriculture. :contentReference[oaicite:7]{index=7}  
+Today, Nagar balances its heritage, mountain culture and growing tourism, while offering some of the most dramatic mountain scenery in the Karakoram range.`,
   },
+
   {
     id: 6,
     name: "Deosai Plains",
